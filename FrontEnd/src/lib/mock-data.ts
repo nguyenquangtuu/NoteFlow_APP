@@ -8,10 +8,15 @@ export const mockUser: User = {
   avatarUrl: "",
   preferences: {
     theme: "light",
+<<<<<<< HEAD
     defaultView: "grid",
     language: "vi",
     fontSize: "16",
     noteColor: "#FFFFFF",
+=======
+    defaultView: "list",
+    language: "vi",
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   },
 };
 

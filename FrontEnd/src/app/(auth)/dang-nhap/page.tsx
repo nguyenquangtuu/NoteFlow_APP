@@ -37,6 +37,7 @@ function LoginForm() {
       title="Đăng nhập"
       description="Truy cập không gian ghi chú theo lịch, lưu ý tưởng và công việc mỗi ngày."
       footer={
+<<<<<<< HEAD
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
           <p>
             Chưa có tài khoản? <Link href="/dang-ky">Đăng ký ngay</Link>
@@ -45,6 +46,11 @@ function LoginForm() {
             Quên mật khẩu?
           </Link>
         </div>
+=======
+        <p>
+          Chưa có tài khoản? <Link href="/dang-ky">Đăng ký ngay</Link>
+        </p>
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       }
     >
       <form className="form-stack" onSubmit={handleSubmit}>
@@ -59,6 +65,12 @@ function LoginForm() {
         <button className="primary-button" type="submit">
           Đăng nhập
         </button>
+<<<<<<< HEAD
+=======
+        <Link href="/quen-mat-khau" className="ghost-link">
+          Quên mật khẩu?
+        </Link>
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
         {message ? <p className="form-message">{message}</p> : null}
       </form>
     </AuthShell>

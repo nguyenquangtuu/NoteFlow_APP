@@ -18,6 +18,26 @@ export default function SharedNotePage() {
 
   useEffect(() => {
     if (!token) return;
+<<<<<<< HEAD
+=======
+    
+    if (token === "demo-token") {
+      setNote({
+        id: "demo",
+        title: "Ghi chú chia sẻ mẫu",
+        content: "Đây là nội dung của ghi chú được chia sẻ. Bạn đang xem ở chế độ demo.",
+        noteDate: new Date().toISOString().split('T')[0],
+        isPinned: false,
+        isDeleted: false,
+        isPasswordProtected: false,
+        labels: [],
+        images: []
+      });
+      setPermission("editor");
+      setIsLoading(false);
+      return;
+    }
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
     async function fetchSharedNote() {
       try {
@@ -39,6 +59,14 @@ export default function SharedNotePage() {
   }, [token]);
 
   const handleSave = async (updatedNote: Note) => {
+<<<<<<< HEAD
+=======
+    if (token === "demo-token") {
+      setSaveStatus("Đã lưu (Demo)");
+      setTimeout(() => setSaveStatus(""), 2000);
+      return;
+    }
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
     setSaveStatus("Đang lưu...");
     try {
@@ -70,7 +98,11 @@ export default function SharedNotePage() {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!note?.id) return;
+=======
+    if (!note?.id || token === "demo-token") return;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL
       ? process.env.NEXT_PUBLIC_API_URL.replace('/api', '')
@@ -119,7 +151,11 @@ export default function SharedNotePage() {
   const authToken = typeof window !== "undefined" ? localStorage.getItem("noteflow_token") : null;
 
   const handleJoinWorkspace = async () => {
+<<<<<<< HEAD
     if (!authToken) return;
+=======
+    if (!authToken || token === "demo-token") return;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/notes/shared/${token}/join`, {
         method: "POST",
@@ -161,7 +197,11 @@ export default function SharedNotePage() {
               <Save size={14} /> {saveStatus}
             </span>
           )}
+<<<<<<< HEAD
           {authToken && (
+=======
+          {authToken && token !== "demo-token" && (
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
             <button 
               onClick={handleJoinWorkspace}
               style={{
@@ -236,4 +276,7 @@ export default function SharedNotePage() {
     </div>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739

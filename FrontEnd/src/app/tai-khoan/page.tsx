@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿"use client";
 
 import Link from "next/link";
@@ -24,31 +25,61 @@ export default function ProfilePage() {
   const [newPassword, setNewPassword] = useState("");
   const [profileMessage, setProfileMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
+=======
+"use client";
+
+import { FormEvent, useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { mockUser } from "@/lib/mock-data";
+import type { User } from "@/types";
+
+export default function ProfilePage() {
+  const [user, setUser] = useState<User>(mockUser);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
   useEffect(() => {
     const token = window.localStorage.getItem("noteflow_token");
     if (!token) return;
 
+<<<<<<< HEAD
     api
       .getProfile(token)
       .then((response) => setUser(response.user))
       .catch((error) => setProfileMessage(error.message));
+=======
+    api.getProfile(token)
+      .then((response) => setUser(response.user))
+      .catch((error) => setMessage(error.message));
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }, []);
 
   async function updateProfile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const token = window.localStorage.getItem("noteflow_token");
     if (!token) {
+<<<<<<< HEAD
       setProfileMessage("Cần đăng nhập để cập nhật tài khoản.");
+=======
+      setMessage("Can dang nhap de cap nhat tai khoan.");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       return;
     }
 
     try {
       const response = await api.updateProfile(token, user);
       setUser(response.user);
+<<<<<<< HEAD
       setProfileMessage(response.message || "Đã lưu thông tin tài khoản.");
     } catch (error) {
       setProfileMessage(error instanceof Error ? error.message : "Không thể cập nhật tài khoản.");
+=======
+      setMessage(response.message);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Khong the cap nhat tai khoan.");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     }
   }
 
@@ -56,12 +87,17 @@ export default function ProfilePage() {
     event.preventDefault();
     const token = window.localStorage.getItem("noteflow_token");
     if (!token) {
+<<<<<<< HEAD
       setPasswordMessage("Cần đăng nhập để đổi mật khẩu.");
+=======
+      setMessage("Can dang nhap de doi mat khau.");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       return;
     }
 
     try {
       const response = await api.changePassword(token, { currentPassword, newPassword });
+<<<<<<< HEAD
       setPasswordMessage(response.message || "Đổi mật khẩu thành công.");
       setCurrentPassword("");
       setNewPassword("");
@@ -93,10 +129,33 @@ export default function ProfilePage() {
             Họ và tên
             <input
               className="field-control"
+=======
+      setMessage(response.message);
+      setCurrentPassword("");
+      setNewPassword("");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Khong the doi mat khau.");
+    }
+  }
+
+  return (
+    <main className="profile-page">
+      <section className="profile-card">
+        <div>
+          <p className="eyebrow">Tai khoan</p>
+          <h1>Ho so va tuy chon</h1>
+        </div>
+
+        <form className="form-stack" onSubmit={updateProfile}>
+          <label>
+            Ho va ten
+            <input
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
               value={user.fullName}
               onChange={(event) => setUser((current) => ({ ...current, fullName: event.target.value }))}
             />
           </label>
+<<<<<<< HEAD
           <label className="field">
             Email
             <input className="field-control" value={user.email} readOnly />
@@ -105,10 +164,20 @@ export default function ProfilePage() {
             Avatar URL
             <input
               className="field-control"
+=======
+          <label>
+            Email
+            <input value={user.email} readOnly />
+          </label>
+          <label>
+            Avatar URL
+            <input
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
               value={user.avatarUrl || ""}
               onChange={(event) => setUser((current) => ({ ...current, avatarUrl: event.target.value }))}
             />
           </label>
+<<<<<<< HEAD
 
           <div className="field">
             <span>Giao diện</span>
@@ -275,6 +344,29 @@ export default function ProfilePage() {
             Đổi mật khẩu
           </button>
           {passwordMessage ? <p className="form-message">{passwordMessage}</p> : null}
+=======
+          <button className="primary-button" type="submit">
+            Luu thong tin
+          </button>
+        </form>
+      </section>
+
+      <section className="profile-card">
+        <h2>Doi mat khau</h2>
+        <form className="form-stack" onSubmit={changePassword}>
+          <label>
+            Mat khau hien tai
+            <input value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} type="password" />
+          </label>
+          <label>
+            Mat khau moi
+            <input value={newPassword} onChange={(event) => setNewPassword(event.target.value)} type="password" />
+          </label>
+          <button className="primary-button" type="submit">
+            Doi mat khau
+          </button>
+          {message ? <p className="form-message">{message}</p> : null}
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
         </form>
       </section>
     </main>

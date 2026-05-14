@@ -21,11 +21,16 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 
   const data = await response.json();
   if (!response.ok) {
+<<<<<<< HEAD
     throw new Error(`${response.status}: ${data.message || "Không thể xử lý yêu cầu."}`);
+=======
+    throw new Error(data.message || "Khong the xu ly yeu cau.");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }
   return data;
 }
 
+<<<<<<< HEAD
 async function uploadImage(token: string, noteId: string, file: File) {
   const formData = new FormData();
   formData.append("image", file);
@@ -52,6 +57,11 @@ export const api = {
       method: "POST",
       body: payload,
     }),
+=======
+export const api = {
+  register: (payload: { fullName: string; email: string; password: string }) =>
+    request<{ message: string; activationToken?: string }>("/auth/register", { method: "POST", body: payload }),
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   activate: (token: string) =>
     request<{ message: string }>("/auth/activate", { method: "POST", body: { token } }),
   login: (payload: { email: string; password: string }) =>
@@ -74,15 +84,25 @@ export const api = {
     request<{ message: string; label: Label }>("/labels", { method: "POST", body: payload, token }),
   updateLabel: (token: string, id: string, payload: { name: string; color: string }) =>
     request<{ message: string }>(`/labels/${id}`, { method: "PUT", body: payload, token }),
+<<<<<<< HEAD
   deleteLabel: (token: string, id: string) => request<{ message: string }>(`/labels/${id}`, { method: "DELETE", token }),
   getNotes: (token: string, params = "") => request<{ notes: Note[] }>(`/notes${params}`, { token }),
   createNote: (
     token: string,
     payload: Partial<Note> & { noteDate?: string; labelIds?: string[]; notePassword?: string },
+=======
+  deleteLabel: (token: string, id: string) =>
+    request<{ message: string }>(`/labels/${id}`, { method: "DELETE", token }),
+  getNotes: (token: string, params = "") => request<{ notes: Note[] }>(`/notes${params}`, { token }),
+  createNote: (
+    token: string,
+    payload: Partial<Note> & { noteDate: string; labelIds?: string[]; notePassword?: string },
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   ) => request<{ message: string; note: Note }>("/notes", { method: "POST", body: payload, token }),
   updateNote: (
     token: string,
     id: string,
+<<<<<<< HEAD
     payload: Partial<Note> & { labelIds?: string[]; notePassword?: string; clearPassword?: boolean; noteAccessPassword?: string },
   ) => request<{ message: string; note: Note }>(`/notes/${id}`, { method: "PUT", body: payload, token }),
   deleteNote: (token: string, id: string, noteAccessPassword?: string) =>
@@ -95,12 +115,25 @@ export const api = {
       `/notes/${id}/shares`,
       { token },
     ),
+=======
+    payload: Partial<Note> & { labelIds?: string[]; notePassword?: string; clearPassword?: boolean },
+  ) => request<{ message: string; note: Note }>(`/notes/${id}`, { method: "PUT", body: payload, token }),
+  deleteNote: (token: string, id: string) =>
+    request<{ message: string }>(`/notes/${id}`, { method: "DELETE", token }),
+  deleteNotePermanently: (token: string, id: string) =>
+    request<{ message: string }>(`/notes/${id}/permanent`, { method: "DELETE", token }),
+  shareNote: (token: string, id: string) =>
+    request<{ message: string; shareUrl: string }>(`/notes/${id}/share`, { method: "POST", token }),
+  getNoteShares: (token: string, id: string) =>
+    request<{ publicPermission: string; shareToken: string; shares: { email: string; permission: string }[] }>(`/notes/${id}/shares`, { token }),
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   updatePublicPermission: (token: string, id: string, permission: string) =>
     request<{ message: string }>(`/notes/${id}/shares/public`, { method: "PUT", body: { permission }, token }),
   addNoteShareUser: (token: string, id: string, email: string, permission: string) =>
     request<{ message: string }>(`/notes/${id}/shares/user`, { method: "POST", body: { email, permission }, token }),
   removeNoteShareUser: (token: string, id: string, email: string) =>
     request<{ message: string }>(`/notes/${id}/shares/user/${email}`, { method: "DELETE", token }),
+<<<<<<< HEAD
   uploadNoteImage: (token: string, noteId: string, file: File) => uploadImage(token, noteId, file),
   verifyNotePassword: (token: string, id: string, password: string) =>
     request<{ message: string; note: Note }>(`/notes/${id}/password/verify`, { method: "POST", body: { password }, token }),
@@ -129,4 +162,6 @@ export const api = {
     }),
   testPush: (token: string) =>
     request<{ message: string }>("/notifications/test-push", { method: "POST", token }),
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 };

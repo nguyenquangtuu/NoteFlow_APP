@@ -7,7 +7,10 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const labelRoutes = require("./routes/labels");
 const noteRoutes = require("./routes/notes");
+<<<<<<< HEAD
 const notificationRoutes = require("./routes/notifications");
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
 const app = express();
 const port = Number(process.env.PORT || 4000);
@@ -29,7 +32,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/labels", labelRoutes);
 app.use("/api/notes", noteRoutes);
+<<<<<<< HEAD
 app.use("/api/notifications", notificationRoutes);
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
 app.use((error, _req, res, _next) => {
   console.error(error);

@@ -4,6 +4,10 @@ import "dayjs/locale/vi";
 import { useEffect, useEffectEvent, useMemo, useState, useTransition, useDeferredValue, useRef } from "react";
 import { io } from "socket.io-client";
 import { api } from "@/lib/api";
+<<<<<<< HEAD
+=======
+import { mockLabels, mockNotes, mockUser } from "@/lib/mock-data";
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 import type { Label, Note, User } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -25,6 +29,7 @@ function parseChecklist(content: string) {
 export function useNoteFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
+<<<<<<< HEAD
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
@@ -33,6 +38,18 @@ export function useNoteFlow() {
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+=======
+  const [token, setToken] = useState<string | null>(() =>
+    typeof window === "undefined" ? null : window.localStorage.getItem(tokenStorageKey),
+  );
+  const [user, setUser] = useState<User | null>(null);
+  const [notes, setNotes] = useState<Note[]>(mockNotes);
+  const [labels, setLabels] = useState<Label[]>(mockLabels);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   const [sidebarFilter, setSidebarFilter] = useState<SidebarFilter>("all");
   const [selectedLabelId, setSelectedLabelId] = useState<string | null>(null);
   const [showAllDates, setShowAllDates] = useState(false);
@@ -80,14 +97,18 @@ export function useNoteFlow() {
     labelId: string;
   }>({ isOpen: false, x: 0, y: 0, labelId: "" });
 
+<<<<<<< HEAD
   const [profileModalOpen, setProfileModalOpen] = useState(false);
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 
   const [draft, setDraft] = useState<Note | null>(null);
   const [isOnline, setIsOnline] = useState(true);
   const [showOnlineToast, setShowOnlineToast] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
+<<<<<<< HEAD
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -129,6 +150,25 @@ export function useNoteFlow() {
   }, [user?.preferences]);
 
   useEffect(() => {
+=======
+
+  useEffect(() => {
+    setIsMounted(true);
+    setIsOnline(typeof window !== "undefined" ? window.navigator.onLine : true);
+
+    // Load from cache on mount to avoid hydration mismatch
+    const cachedUser = localStorage.getItem("noteflow_cache_user");
+    if (cachedUser) setUser(JSON.parse(cachedUser));
+
+    const cachedNotes = localStorage.getItem("noteflow_cache_notes");
+    if (cachedNotes) setNotes(JSON.parse(cachedNotes));
+
+    const cachedLabels = localStorage.getItem("noteflow_cache_labels");
+    if (cachedLabels) setLabels(JSON.parse(cachedLabels));
+  }, []);
+
+  useEffect(() => {
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     if (!isOnline) {
       setWasOffline(true);
     } else if (isOnline && wasOffline) {
@@ -304,10 +344,15 @@ export function useNoteFlow() {
   });
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!isMounted) return;
 
     if (!token) {
       router.push("/dang-nhap");
+=======
+    if (typeof window !== "undefined" && !token) {
+      router.push("/dang-ky");
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       return;
     }
 
@@ -358,12 +403,16 @@ export function useNoteFlow() {
             window.history.replaceState({}, '', '/');
           }
         }
+<<<<<<< HEAD
       } catch (err: any) {
         if (err.message?.includes("401") || err.message?.includes("Phiên đăng nhập") || err.message?.includes("Token hết hạn")) {
           logout();
           return;
         }
 
+=======
+      } catch (err) {
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
         if (typeof window !== "undefined" && !window.navigator.onLine) {
           setSaveMessage("Bạn đang dùng chế độ ngoại tuyến.");
         } else {
@@ -426,6 +475,7 @@ export function useNoteFlow() {
       });
     });
 
+<<<<<<< HEAD
     socket.on("note_shared", (data: { note: Note, sharedBy: string }) => {
       setNotes(prev => {
         // Tránh trùng lặp nếu đã có trong list
@@ -437,6 +487,8 @@ export function useNoteFlow() {
       setTimeout(() => setSaveMessage(""), 5000);
     });
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     return () => {
       socket.disconnect();
     };
@@ -455,8 +507,12 @@ export function useNoteFlow() {
       originalNote.content !== draft.content ||
       originalNote.isPinned !== draft.isPinned ||
       originalNote.noteDate !== draft.noteDate ||
+<<<<<<< HEAD
       JSON.stringify(originalNote.labels) !== JSON.stringify(draft.labels) ||
       JSON.stringify(originalNote.images) !== JSON.stringify(draft.images);
+=======
+      JSON.stringify(originalNote.labels) !== JSON.stringify(draft.labels);
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
     // Chỉ lưu nếu có thay đổi thực sự
     if (!isChanged) return;
@@ -492,9 +548,12 @@ export function useNoteFlow() {
       return matchesFilter && matchesLabel && matchesDate && matchesSearch;
     }).sort((a, b) => {
       if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+<<<<<<< HEAD
       if (a.isPinned && b.isPinned) {
         return dayjs(b.pinnedAt || b.updatedAt || 0).valueOf() - dayjs(a.pinnedAt || a.updatedAt || 0).valueOf();
       }
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       const order = sortOrder === "newest" ? 1 : -1;
       if (a.noteDate !== b.noteDate) return (dayjs(b.noteDate).valueOf() - dayjs(a.noteDate).valueOf()) * order;
       return (dayjs(b.updatedAt || 0).valueOf() - dayjs(a.updatedAt || 0).valueOf()) * order;
@@ -573,6 +632,7 @@ export function useNoteFlow() {
     }
   }
 
+<<<<<<< HEAD
   async function removeNote(id: string) {
     setNotes((current) => current.map((note) => (note.id === id ? { ...note, isDeleted: true } : note)));
     if (token) {
@@ -586,6 +646,31 @@ export function useNoteFlow() {
     }
     setSidebarFilter("trash");
     setSaveMessage("Đã chuyển ghi chú vào thùng rác.");
+=======
+  function removeNote(id: string) {
+    setConfirmModal({
+      isOpen: true,
+      title: "Chuyển vào thùng rác",
+      message: "Bạn có chắc chắn muốn chuyển ghi chú này vào thùng rác không?",
+      confirmText: "Chuyển",
+      isDestructive: true,
+      onConfirm: async () => {
+        setNotes((current) => current.map((note) => (note.id === id ? { ...note, isDeleted: true } : note)));
+        if (token) {
+          try {
+            await api.deleteNote(token, id);
+          } catch(error) {
+            if (!isOnline || error instanceof TypeError || (error as Error).message === "Failed to fetch") {
+              enqueueOfflineAction({ type: "UPDATE_NOTE", id: id, payload: { isDeleted: true } });
+            }
+          }
+        }
+        setSidebarFilter("trash");
+        setSaveMessage("Đã chuyển ghi chú vào thùng rác.");
+        setConfirmModal(prev => ({ ...prev, isOpen: false }));
+      }
+    });
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }
 
   async function restoreNote(id: string) {
@@ -660,13 +745,19 @@ export function useNoteFlow() {
   function toggleSidebarFilter(filter: SidebarFilter) {
     setSidebarFilter(filter);
     setSelectedLabelId(null);
+<<<<<<< HEAD
     setIsSidebarOpen(false);
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }
 
   function selectLabel(labelId: string) {
     setSelectedLabelId(labelId);
     setSidebarFilter("all");
+<<<<<<< HEAD
     setIsSidebarOpen(false);
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }
 
   function editLabel(labelId: string) {
@@ -743,7 +834,11 @@ export function useNoteFlow() {
 
   async function openShareModal(note: Note) {
     if (!token) {
+<<<<<<< HEAD
       setSaveMessage("Vui lòng đăng nhập để sử dụng tính năng chia sẻ.");
+=======
+      setShareModal(prev => ({ ...prev, isOpen: true, noteId: note.id, link: "Chế độ demo: http://localhost:3000/chia-se/demo-token", publicPermission: "none", shares: [] }));
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       return;
     }
     
@@ -766,7 +861,11 @@ export function useNoteFlow() {
     if (!shareModal.noteId) return;
     
     if (!token) {
+<<<<<<< HEAD
       setSaveMessage("Vui lòng đăng nhập để sử dụng tính năng chia sẻ.");
+=======
+      setShareModal(prev => ({ ...prev, link: "Chế độ demo: http://localhost:3000/chia-se/demo-token" }));
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       return;
     }
     
@@ -802,6 +901,7 @@ export function useNoteFlow() {
 
   function logout() {
     window.localStorage.removeItem(tokenStorageKey);
+<<<<<<< HEAD
     window.localStorage.removeItem("noteflow_cache_user");
     window.localStorage.removeItem("noteflow_cache_notes");
     window.localStorage.removeItem("noteflow_cache_labels");
@@ -842,6 +942,16 @@ export function useNoteFlow() {
     }
   }
 
+=======
+    setToken(null);
+    setUser(mockUser);
+    setNotes(mockNotes);
+    setLabels(mockLabels);
+    setSaveMessage("Đã đăng xuất. Giao diện quay về chế độ demo.");
+    router.push("/dang-nhap");
+  }
+
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   async function selectNote(note: Note) {
     const latestNote = await refreshLatestNoteFromServer(note.id);
     const noteToOpen = latestNote ?? note;
@@ -861,6 +971,7 @@ export function useNoteFlow() {
     confirmModal, setConfirmModal, labelModal, setLabelModal, shareModal, setShareModal,
     labelNameInput, setLabelNameInput, labelColorInput, setLabelColorInput,
     labelContextMenu, setLabelContextMenu,
+<<<<<<< HEAD
     logout, toggleTheme, generateShareLink, openShareModal, handleLabelContextMenu, handleLabelTouchStart, handleLabelTouchEnd,
     addLabelToNote, removeLabelFromNote, toggleSidebarFilter, selectLabel, editLabel, deleteLabel,
     createNote, removeNote, restoreNote, removeNotePermanently, togglePin, selectNote,
@@ -868,8 +979,17 @@ export function useNoteFlow() {
     profileModalOpen, setProfileModalOpen,
     isSidebarOpen, setIsSidebarOpen,
     toggleSidebar: () => setIsSidebarOpen(!isSidebarOpen)
+=======
+    logout, generateShareLink, openShareModal, handleLabelContextMenu, handleLabelTouchStart, handleLabelTouchEnd,
+    addLabelToNote, removeLabelFromNote, toggleSidebarFilter, selectLabel, editLabel, deleteLabel,
+    createNote, removeNote, restoreNote, removeNotePermanently, togglePin, selectNote,
+    visibleNotes, selectedNote, listTitle, days, persistDraft, parseChecklist
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   };
 }
 
 export type NoteFlowState = ReturnType<typeof useNoteFlow>;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739

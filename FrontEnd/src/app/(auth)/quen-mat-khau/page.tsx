@@ -8,14 +8,21 @@ import { api } from "@/lib/api";
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+<<<<<<< HEAD
   const [demoToken, setDemoToken] = useState("");
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
       const response = await api.forgotPassword(email);
+<<<<<<< HEAD
       setMessage(response.message);
       if (response.resetToken) setDemoToken(response.resetToken);
+=======
+      setMessage(`${response.message} Token demo: ${response.resetToken || "Đã gửi email"}`);
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Không thể gửi yêu cầu.");
     }
@@ -40,6 +47,7 @@ export default function ForgotPasswordPage() {
           Gửi email đặt lại
         </button>
         {message ? <p className="form-message">{message}</p> : null}
+<<<<<<< HEAD
         {demoToken && (
           <p className="form-message" style={{ background: "var(--bg-muted)", padding: "10px", borderRadius: "8px", marginTop: "10px" }}>
             <span style={{ display: "block", marginBottom: "4px", fontSize: "0.8rem", opacity: 0.7 }}>Demo Mode:</span>
@@ -51,6 +59,8 @@ export default function ForgotPasswordPage() {
             </Link>
           </p>
         )}
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       </form>
     </AuthShell>
   );

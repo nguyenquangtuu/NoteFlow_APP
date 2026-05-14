@@ -6,14 +6,18 @@ import { NoteList } from "./NoteList";
 import { NoteEditor } from "./NoteEditor";
 import { Modals } from "./Modals";
 import { Toasts } from "./Toasts";
+<<<<<<< HEAD
 import { ProfileModal } from "./ProfileModal";
 import { Moon, Menu, X, Bell } from "lucide-react";
 import { useEffect } from "react";
 import { registerServiceWorker, subscribeUserToPush } from "@/utils/push-notification";
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
 export function NoteFlowLayout() {
   const {
     search, setSearch, saveMessage, viewMode, setViewMode,
+<<<<<<< HEAD
     showAllDates, setShowAllDates, selectedDate, setSelectedDate, user, toggleTheme,
     isSidebarOpen, toggleSidebar, setIsSidebarOpen
   } = useNoteFlowContext();
@@ -82,6 +86,28 @@ export function NoteFlowLayout() {
             <button onClick={toggleTheme} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: "var(--radius-md)", border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text-muted)", cursor: "pointer", transition: "all 0.2s" }} title="Đổi giao diện Sáng / Tối">
               <Moon size={18} />
             </button>
+=======
+    showAllDates, setShowAllDates, selectedDate
+  } = useNoteFlowContext();
+
+  return (
+    <main className="dashboard-shell">
+      <Sidebar />
+      <section className="workspace">
+        <header className="topbar">
+          <label className="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Tìm kiếm ghi chú..."
+            />
+            <span>⌘ K</span>
+          </label>
+
+          <div className="topbar-actions">
+            {saveMessage && <span className="save-status">{saveMessage}</span>}
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
             <div className="view-toggle">
               <button className={viewMode === "grid" ? "active" : ""} onClick={() => setViewMode("grid")}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
@@ -124,6 +150,7 @@ export function NoteFlowLayout() {
           </div>
         </header>
 
+<<<<<<< HEAD
         {user && user.isActive === false ? (
           <div style={{
             margin: "0 28px 16px",
@@ -139,13 +166,18 @@ export function NoteFlowLayout() {
           </div>
         ) : null}
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
         <div className="content-grid">
           <NoteList />
           <NoteEditor />
         </div>
       </section>
       <Modals />
+<<<<<<< HEAD
       <ProfileModal />
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       <Toasts />
     </main>
   );

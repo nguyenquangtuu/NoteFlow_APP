@@ -16,6 +16,7 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-2xl: 20px;
+<<<<<<< HEAD
   --note-font-size: 16px;
   --note-surface: #FFFFFF;
 }
@@ -35,6 +36,8 @@
   --shadow: 0 4px 10px -2px rgb(0 0 0 / 0.5);
   --shadow-lg: 0 14px 24px -10px rgb(0 0 0 / 0.6);
   --note-surface: #0B1220;
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 }
 
 html,
@@ -67,12 +70,15 @@ textarea {
   outline: none;
 }
 
+<<<<<<< HEAD
 input::placeholder,
 textarea::placeholder {
   color: var(--text-muted);
   opacity: 0.7;
 }
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 button {
   border: 0;
   background: transparent;
@@ -135,6 +141,7 @@ button {
   width: 260px;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--border);
+<<<<<<< HEAD
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
@@ -142,6 +149,13 @@ button {
   flex-shrink: 0;
   height: 100vh;
   overflow-y: auto;
+=======
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  flex-shrink: 0;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 }
 
 .brand-block h1 {
@@ -477,7 +491,11 @@ button {
 }
 
 .notes-list.grid .note-card > p {
+<<<<<<< HEAD
   -webkit-line-clamp: 2;
+=======
+  -webkit-line-clamp: 4;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 }
 
 .note-card-head {
@@ -492,11 +510,14 @@ button {
   font-weight: 600;
   line-height: 1.4;
   color: var(--text);
+<<<<<<< HEAD
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 }
 
 .pin-icon {
@@ -529,7 +550,11 @@ button {
 
 .editor-column {
   flex: 1;
+<<<<<<< HEAD
   background: var(--note-surface);
+=======
+  background: var(--panel);
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   border: 1px solid var(--border);
   border-radius: var(--radius-2xl);
   padding: 40px;
@@ -614,7 +639,11 @@ button {
   width: 100%;
   border: none;
   background: transparent;
+<<<<<<< HEAD
   font-size: var(--note-font-size);
+=======
+  font-size: 1rem;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   line-height: 1.7;
   color: var(--text);
   resize: none;
@@ -675,6 +704,7 @@ button {
   border-top: 1px solid var(--border);
 }
 
+<<<<<<< HEAD
 .note-image-container img {
   transition: transform 0.4s ease !important;
 }
@@ -693,13 +723,21 @@ button {
   transform: scale(1.1);
 }
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 .empty-card {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
+<<<<<<< HEAD
   font-weight: 500;
+=======
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 }
 
 /* Auth Pages Styling */
@@ -720,6 +758,7 @@ button {
   background: var(--panel);
 }
 
+<<<<<<< HEAD
 .profile-page {
   max-width: 1220px;
   margin: 0 auto;
@@ -912,6 +951,8 @@ button {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-soft) 65%, transparent);
 }
 
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 .auth-hero {
   display: flex;
   flex-direction: column;
@@ -1012,7 +1053,10 @@ button {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--bg);
+<<<<<<< HEAD
   color: var(--text);
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   transition: all 0.2s;
 }
 
@@ -1047,6 +1091,7 @@ button {
   text-decoration: underline;
 }
 
+<<<<<<< HEAD
 .mobile-menu-toggle {
   display: none;
 }
@@ -1155,6 +1200,37 @@ button {
   .auth-panel,
   .profile-card {
     padding: 24px !important;
+=======
+@media (max-width: 1024px) {
+  .dashboard-shell {
+    flex-direction: column;
+  }
+  .narrow-sidebar {
+    width: 100%;
+    flex-direction: row;
+    height: 60px;
+    padding: 0 20px;
+  }
+  .nav-top, .nav-bottom {
+    flex-direction: row;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .content-grid {
+    flex-direction: column;
+  }
+  .note-column {
+    width: 100%;
+  }
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+  .auth-hero {
+    padding: 32px;
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   }
 }
 

@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
+<<<<<<< HEAD
     const { fullName, email, password, confirmPassword } = req.body;
     if (!fullName || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin." });
@@ -18,6 +19,12 @@ router.post("/register", async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Mật khẩu xác nhận không khớp." });
     }
+=======
+    const { fullName, email, password } = req.body;
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin." });
+    }
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
 
     const existingUsers = await query("SELECT id FROM users WHERE email = ? LIMIT 1", [email]);
     if (existingUsers.length) {
@@ -29,10 +36,15 @@ router.post("/register", async (req, res) => {
     const activationToken = createOpaqueToken();
     const preferences = JSON.stringify({
       theme: "light",
+<<<<<<< HEAD
       defaultView: "grid",
       language: "vi",
       fontSize: "16",
       noteColor: "#FFFFFF",
+=======
+      defaultView: "list",
+      language: "vi",
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     });
 
     await query(
@@ -48,6 +60,7 @@ router.post("/register", async (req, res) => {
       html: `<p>Xin chào ${fullName},</p><p>Hãy kích hoạt tài khoản của bạn tại <a href="${activationUrl}">${activationUrl}</a></p>`,
     });
 
+<<<<<<< HEAD
     const token = createAccessToken(userId);
     return res.status(201).json({
       message: "Đăng ký thành công. Bạn đã được đăng nhập, vui lòng kiểm tra email để kích hoạt tài khoản.",
@@ -61,6 +74,11 @@ router.post("/register", async (req, res) => {
         preferences: JSON.parse(preferences),
         isActive: false,
       },
+=======
+    return res.status(201).json({
+      message: "Đăng ký thành công. Vui lòng kiểm tra email để kích hoạt tài khoản.",
+      activationToken,
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     });
   } catch (error) {
     return res.status(500).json({ message: "Không thể đăng ký tài khoản.", error: error.message });
@@ -80,7 +98,11 @@ router.post("/activate", async (req, res) => {
     }
 
     await query("UPDATE users SET is_active = 1, activation_token = NULL WHERE id = ?", [users[0].id]);
+<<<<<<< HEAD
     return res.json({ message: "Tài khoản đã được kích hoạt." });
+=======
+    return res.json({ message: "Tài khoản đã được kích hoạt. Bạn có thể đăng nhập." });
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
   } catch (error) {
     return res.status(500).json({ message: "Không thể kích hoạt tài khoản.", error: error.message });
   }
@@ -101,6 +123,13 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Email hoặc mật khẩu không đúng." });
     }
 
+<<<<<<< HEAD
+=======
+    if (!user.is_active) {
+      return res.status(403).json({ message: "Tài khoản chưa kích hoạt qua email." });
+    }
+
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     const token = createAccessToken(user.id);
     return res.json({
       token,
@@ -110,7 +139,10 @@ router.post("/login", async (req, res) => {
         email: user.email,
         avatarUrl: user.avatar_url,
         preferences: user.preferences ? JSON.parse(user.preferences) : null,
+<<<<<<< HEAD
         isActive: Boolean(user.is_active),
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
       },
     });
   } catch (error) {
@@ -186,7 +218,10 @@ router.get("/me", authMiddleware, async (req, res) => {
       email: req.user.email,
       avatarUrl: req.user.avatar_url,
       preferences: req.user.preferences ? JSON.parse(req.user.preferences) : null,
+<<<<<<< HEAD
       isActive: Boolean(req.user.is_active),
+=======
+>>>>>>> 1160cfc5b3b8e7daa8e94f09efa120a52df02739
     },
   });
 });
