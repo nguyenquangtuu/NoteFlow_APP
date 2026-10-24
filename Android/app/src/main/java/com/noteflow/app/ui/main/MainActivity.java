@@ -2,6 +2,7 @@ package com.noteflow.app.ui.main;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +11,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.material.chip.Chip;
 import com.noteflow.app.R;
 import com.noteflow.app.data.model.Label;
 import com.noteflow.app.data.model.Note;
@@ -23,7 +24,6 @@ import com.noteflow.app.data.repository.NoteRepository;
 import com.noteflow.app.data.session.SessionManager;
 import com.noteflow.app.databinding.ActivityMainBinding;
 import com.noteflow.app.realtime.SocketManager;
-import com.noteflow.app.ui.auth.LoginActivity;
 import com.noteflow.app.ui.dialogs.LabelManagerDialog;
 import com.noteflow.app.ui.dialogs.NotePasswordDialog;
 import com.noteflow.app.ui.dialogs.ShareBottomSheet;
@@ -33,6 +33,7 @@ import com.noteflow.app.utils.Constants;
 import com.noteflow.app.utils.DateTimeUtils;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
     private MainViewModel viewModel;
     private SessionManager sessionManager;
     private NoteAdapter noteAdapter;
-    private LabelDrawerAdapter labelDrawerAdapter;
     private boolean isGridMode = true;
 
     @Override
@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
 
         isGridMode = "grid".equalsIgnoreCase(sessionManager.getViewMode());
 
-        setupDrawerHeader();
-        setupRecyclerViews();
+        setupRecyclerView();
         setupToolbarAndSearch();
+        setupBottomNavigation();
         setupObservers();
         setupListeners();
 
@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
     @Override
     protected void onResume() {
         super.onResume();
-        setupDrawerHeader();
         viewModel.refreshData();
     }
 
@@ -82,13 +81,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
         SocketManager.getInstance().removeListener(this);
     }
 
-    private void setupDrawerHeader() {
-        binding.tvDrawerUserName.setText(sessionManager.getUserName());
-        binding.tvDrawerUserEmail.setText(sessionManager.getUserEmail());
-    }
-
-    private void setupRecyclerViews() {
-        // Notes Adapter
+    private void setupRecyclerView() {
         noteAdapter = new NoteAdapter(new NoteAdapter.OnNoteClickListener() {
             @Override
             public void onNoteClick(Note note) {
@@ -103,23 +96,6 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
 
         updateLayoutManager();
         binding.rvNotes.setAdapter(noteAdapter);
-
-        // Labels Adapter in Drawer
-        labelDrawerAdapter = new LabelDrawerAdapter(new LabelDrawerAdapter.OnLabelClickListener() {
-            @Override
-            public void onLabelClick(Label label) {
-                viewModel.selectLabel(label.getId());
-                binding.tvSectionTitle.setText("Nhãn: " + label.getName());
-                binding.drawerLayout.closeDrawer(GravityCompat.START);
-            }
-
-            @Override
-            public void onLabelOptionsClick(Label label) {
-                showEditLabelDialog(label);
-            }
-        });
-        binding.rvDrawerLabels.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvDrawerLabels.setAdapter(labelDrawerAdapter);
     }
 
     private void updateLayoutManager() {
@@ -133,8 +109,6 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
     }
 
     private void setupToolbarAndSearch() {
-        binding.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.openDrawer(GravityCompat.START));
-
         View searchPlate = binding.searchView.findViewById(androidx.appcompat.R.id.search_plate);
         if (searchPlate != null) {
             searchPlate.setBackgroundColor(Color.TRANSPARENT);
@@ -155,6 +129,37 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
         });
     }
 
+    private void setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                viewModel.setFilter(MainViewModel.FilterType.ALL);
+                binding.tvSectionTitle.setText(R.string.all_notes);
+                binding.fabNewNote.show();
+                return true;
+            } else if (itemId == R.id.nav_pinned) {
+                viewModel.setFilter(MainViewModel.FilterType.PINNED);
+                binding.tvSectionTitle.setText(R.string.pinned_notes);
+                binding.fabNewNote.show();
+                return true;
+            } else if (itemId == R.id.nav_shared) {
+                viewModel.setFilter(MainViewModel.FilterType.SHARED);
+                binding.tvSectionTitle.setText(R.string.shared_with_me);
+                binding.fabNewNote.show();
+                return true;
+            } else if (itemId == R.id.nav_trash) {
+                viewModel.setFilter(MainViewModel.FilterType.TRASH);
+                binding.tvSectionTitle.setText(R.string.trash);
+                binding.fabNewNote.hide();
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                return false;
+            }
+            return false;
+        });
+    }
+
     private void setupObservers() {
         viewModel.getVisibleNotes().observe(this, notes -> {
             noteAdapter.submitList(notes);
@@ -162,27 +167,77 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             binding.layoutEmpty.setVisibility(notes.isEmpty() ? View.VISIBLE : View.GONE);
         });
 
-        viewModel.getLabels().observe(this, labels -> {
-            labelDrawerAdapter.setLabels(labels);
-        });
+        viewModel.getLabels().observe(this, this::updateLabelChips);
 
         viewModel.getIsLoading().observe(this, isLoading -> {
             binding.swipeRefresh.setRefreshing(isLoading);
         });
 
-        viewModel.getMessage().observe(this, msg -> {
-            if (msg != null && !msg.isEmpty()) {
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        viewModel.getSelectedDate().observe(this, date -> {
+            if (date == null) {
+                binding.chipDateFilter.setText(R.string.all_dates);
+                binding.chipDateFilter.setChipIconTint(getColorStateList(R.color.primary));
+            } else {
+                binding.chipDateFilter.setText(DateTimeUtils.formatDateVi(date));
             }
         });
 
-        viewModel.getSelectedDate().observe(this, date -> {
-            if (date == null || date.isEmpty()) {
-                binding.chipDateFilter.setText(getString(R.string.all_dates));
-            } else {
-                binding.chipDateFilter.setText("Ngày: " + DateTimeUtils.formatDisplayDate(date));
+        viewModel.getErrorMessage().observe(this, error -> {
+            if (error != null && !error.isEmpty()) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateLabelChips(List<Label> labels) {
+        binding.chipGroupLabels.removeAllViews();
+
+        // 1. Chip "Tất cả"
+        Chip allChip = new Chip(this);
+        allChip.setText("Tất cả nhãn");
+        allChip.setCheckable(true);
+        allChip.setChecked(viewModel.getSelectedLabelId().getValue() == null);
+        allChip.setOnClickListener(v -> {
+            viewModel.selectLabel(null);
+            binding.tvSectionTitle.setText(R.string.all_notes);
+        });
+        binding.chipGroupLabels.addView(allChip);
+
+        // 2. Chips for each label
+        if (labels != null) {
+            String selectedId = viewModel.getSelectedLabelId().getValue();
+            for (Label label : labels) {
+                Chip chip = new Chip(this);
+                chip.setText(label.getName());
+                chip.setCheckable(true);
+                chip.setChecked(label.getId().equals(selectedId));
+
+                try {
+                    int color = Color.parseColor(label.getColor());
+                    chip.setChipIconResource(R.drawable.bg_circle_dot);
+                    chip.setChipIconTint(ColorStateList.valueOf(color));
+                } catch (Exception ignored) {}
+
+                chip.setOnClickListener(v -> {
+                    viewModel.selectLabel(label.getId());
+                    binding.tvSectionTitle.setText("Nhãn: " + label.getName());
+                });
+
+                chip.setOnLongClickListener(v -> {
+                    showEditLabelDialog(label);
+                    return true;
+                });
+
+                binding.chipGroupLabels.addView(chip);
+            }
+        }
+
+        // 3. Chip "+ Thêm nhãn"
+        Chip addChip = new Chip(this);
+        addChip.setText("+ Thêm nhãn");
+        addChip.setChipIconResource(R.drawable.ic_add);
+        addChip.setOnClickListener(v -> showAddLabelDialog());
+        binding.chipGroupLabels.addView(addChip);
     }
 
     private void setupListeners() {
@@ -213,54 +268,6 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             }
             startActivity(intent);
         });
-
-        // Drawer Menu Click Items
-        binding.navAllNotes.setOnClickListener(v -> {
-            viewModel.setFilter(MainViewModel.FilterType.ALL);
-            binding.tvSectionTitle.setText(R.string.all_notes);
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        binding.navPinned.setOnClickListener(v -> {
-            viewModel.setFilter(MainViewModel.FilterType.PINNED);
-            binding.tvSectionTitle.setText(R.string.pinned_notes);
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        binding.navShared.setOnClickListener(v -> {
-            viewModel.setFilter(MainViewModel.FilterType.SHARED);
-            binding.tvSectionTitle.setText(R.string.shared_with_me);
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        binding.navTrash.setOnClickListener(v -> {
-            viewModel.setFilter(MainViewModel.FilterType.TRASH);
-            binding.tvSectionTitle.setText(R.string.trash);
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        });
-
-        binding.btnAddLabel.setOnClickListener(v -> showAddLabelDialog());
-
-        binding.navProfile.setOnClickListener(v -> {
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-            startActivity(new Intent(this, ProfileActivity.class));
-        });
-
-        binding.navLogout.setOnClickListener(v -> {
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-            new AlertDialog.Builder(this)
-                    .setTitle("Đăng xuất")
-                    .setMessage("Bạn có chắc chắn muốn đăng xuất?")
-                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                        SocketManager.getInstance().disconnect();
-                        sessionManager.clear();
-                        Intent intent = new Intent(this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    })
-                    .setNegativeButton("Hủy", null)
-                    .show();
-        });
     }
 
     private void handleNoteClick(Note note) {
@@ -268,22 +275,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             NotePasswordDialog dialog = new NotePasswordDialog(this, NotePasswordDialog.Mode.UNLOCK, new NotePasswordDialog.OnPasswordActionListener() {
                 @Override
                 public void onUnlock(String password) {
-                    NoteRepository repo = new NoteRepository(MainActivity.this);
-                    repo.verifyNotePassword(note.getId(), password, new Callback<NoteDetailResponse>() {
-                        @Override
-                        public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
-                            if (response.isSuccessful() && response.body() != null && response.body().getNote() != null) {
-                                openEditor(response.body().getNote());
-                            } else {
-                                Toast.makeText(MainActivity.this, "Mật khẩu ghi chú không đúng!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<NoteDetailResponse> call, Throwable t) {
-                            Toast.makeText(MainActivity.this, "Lỗi xác thực mật khẩu.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    verifyAndOpenNote(note.getId(), password);
                 }
                 @Override public void onEnable(String p, String c) {}
                 @Override public void onChange(String cur, String n, String conf) {}
@@ -291,72 +283,108 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             });
             dialog.show();
         } else {
-            openEditor(note);
+            openNoteEditor(note.getId(), null);
         }
     }
 
-    private void openEditor(Note note) {
+    private void verifyAndOpenNote(String noteId, String password) {
+        NoteRepository.getInstance(this).getNoteDetail(noteId, password, new Callback<NoteDetailResponse>() {
+            @Override
+            public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getNote() != null) {
+                    openNoteEditor(noteId, password);
+                } else {
+                    Toast.makeText(MainActivity.this, "Mật khẩu không chính xác.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NoteDetailResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Không thể xác minh mật khẩu: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openNoteEditor(String noteId, String password) {
         Intent intent = new Intent(this, NoteEditorActivity.class);
-        intent.putExtra(Constants.EXTRA_NOTE_ID, note.getId());
-        intent.putExtra("extra_note_data", note);
-        if (note.isSharedWithMe() && "viewer".equalsIgnoreCase(note.getSharedPermission())) {
-            intent.putExtra(Constants.EXTRA_IS_READ_ONLY, true);
+        intent.putExtra(Constants.EXTRA_NOTE_ID, noteId);
+        if (password != null) {
+            intent.putExtra(Constants.EXTRA_NOTE_PASSWORD, password);
         }
         startActivity(intent);
     }
 
     private void showNoteQuickActions(Note note) {
-        boolean isTrash = (viewModel.getCurrentFilter().getValue() == MainViewModel.FilterType.TRASH);
-
         String[] options;
-        if (isTrash) {
+        if (note.isDeleted()) {
             options = new String[]{"Khôi phục ghi chú", "Xóa vĩnh viễn"};
+            new AlertDialog.Builder(this)
+                    .setTitle(note.getTitle())
+                    .setItems(options, (dialog, which) -> {
+                        if (which == 0) viewModel.restoreNote(note.getId());
+                        else if (which == 1) confirmPermanentDelete(note);
+                    })
+                    .show();
         } else {
             options = new String[]{
                     note.isPinned() ? "Bỏ ghim" : "Ghim lên đầu",
-                    "Chia sẻ",
+                    note.isPasswordProtected() ? "Đổi / Gỡ mật khẩu khóa" : "Đặt mật khẩu bảo vệ",
+                    "Chia sẻ ghi chú",
                     "Chuyển vào thùng rác"
             };
-        }
-
-        new AlertDialog.Builder(this)
-                .setTitle(note.getTitle().isEmpty() ? "Tùy chọn ghi chú" : note.getTitle())
-                .setItems(options, (dialog, which) -> {
-                    if (isTrash) {
-                        if (which == 0) viewModel.restoreNote(note);
-                        else if (which == 1) promptPasswordForDelete(note, true);
-                    } else {
-                        if (which == 0) viewModel.togglePin(note);
-                        else if (which == 1) new ShareBottomSheet(note.getId()).show(getSupportFragmentManager(), "ShareBottomSheet");
-                        else if (which == 2) {
-                            if (note.isPasswordProtected()) {
-                                promptPasswordForDelete(note, false);
-                            } else {
-                                viewModel.deleteNote(note, null);
-                            }
+            new AlertDialog.Builder(this)
+                    .setTitle(note.getTitle())
+                    .setItems(options, (dialog, which) -> {
+                        switch (which) {
+                            case 0:
+                                viewModel.togglePin(note.getId());
+                                break;
+                            case 1:
+                                handlePasswordManagement(note);
+                                break;
+                            case 2:
+                                ShareBottomSheet.newInstance(note.getId(), note.getTitle(), note.getPublicPermission()).show(getSupportFragmentManager(), "share_bottom_sheet");
+                                break;
+                            case 3:
+                                viewModel.moveToTrash(note.getId());
+                                break;
                         }
-                    }
-                })
+                    })
+                    .show();
+        }
+    }
+
+    private void confirmPermanentDelete(Note note) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xóa vĩnh viễn")
+                .setMessage("Ghi chú này sẽ bị xóa hoàn toàn và không thể khôi phục. Bạn có chắc không?")
+                .setPositiveButton("Xóa luôn", (dialog, which) -> viewModel.deletePermanently(note.getId()))
+                .setNegativeButton("Hủy", null)
                 .show();
     }
 
-    private void promptPasswordForDelete(Note note, boolean isPermanent) {
-        NotePasswordDialog dialog = new NotePasswordDialog(this, NotePasswordDialog.Mode.UNLOCK, new NotePasswordDialog.OnPasswordActionListener() {
+    private void handlePasswordManagement(Note note) {
+        NotePasswordDialog.Mode mode = note.isPasswordProtected() ? NotePasswordDialog.Mode.CHANGE : NotePasswordDialog.Mode.ENABLE;
+        NotePasswordDialog dialog = new NotePasswordDialog(this, mode, new NotePasswordDialog.OnPasswordActionListener() {
+            @Override public void onUnlock(String password) {}
             @Override
-            public void onUnlock(String password) {
-                if (isPermanent) viewModel.deletePermanently(note, password);
-                else viewModel.deleteNote(note, password);
+            public void onEnable(String password, String confirm) {
+                viewModel.enablePassword(note.getId(), password, confirm);
             }
-            @Override public void onEnable(String p, String c) {}
-            @Override public void onChange(String cur, String n, String conf) {}
-            @Override public void onDisable(String cur) {}
+            @Override
+            public void onChange(String currentPassword, String newPassword, String confirmNew) {
+                viewModel.changePassword(note.getId(), currentPassword, newPassword, confirmNew);
+            }
+            @Override
+            public void onDisable(String currentPassword) {
+                viewModel.disablePassword(note.getId(), currentPassword);
+            }
         });
         dialog.show();
     }
 
     private void showDatePicker() {
         if (viewModel.getSelectedDate().getValue() != null) {
-            // Already filtered by date, offer to reset
             new AlertDialog.Builder(this)
                     .setTitle("Lọc ngày")
                     .setMessage("Bạn muốn chọn ngày khác hay xem tất cả các ngày?")
