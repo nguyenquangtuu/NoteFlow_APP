@@ -10,9 +10,17 @@ FrontEnd/
 build/
 */build/
 app/build/
+Android/.gradle/
+Android/build/
+Android/*/build/
+Android/app/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
+Android/local.properties
+Android/.idea/
+Android/*.iml
+Android/*/*.iml
 
 # Log files
 *.log
