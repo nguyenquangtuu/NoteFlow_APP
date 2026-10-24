@@ -31,25 +31,18 @@ Hệ thống **NoteFlow** được thiết kế theo kiến trúc Client - Serve
 - **Xử lý tệp & Đa phương tiện:** Multer multipart/form-data
 - **Dịch vụ Email:** Nodemailer SMTP (Kích hoạt tài khoản, đặt lại mật khẩu)
 
-## Tính năng hiện có
+## ✨ Tính năng chi tiết của hệ thống
 
-- Đăng ký tài khoản bằng email
-- Kích hoạt tài khoản qua email
-- Đăng nhập / đăng xuất
-- Quên mật khẩu và đặt lại mật khẩu
-- Xem và cập nhật hồ sơ người dùng
-- Đổi mật khẩu
-- Tạo / sửa / xóa mềm / xóa vĩnh viễn ghi chú
-- Khôi phục ghi chú từ thùng rác
-- Auto-save khi chỉnh sửa
-- Ghim ghi chú
-- Tìm kiếm, lọc, sắp xếp ghi chú
-- CRUD nhãn, gán nhãn vào ghi chú
-- Bảo vệ ghi chú bằng mật khẩu
-- Chia sẻ ghi chú qua link
-- Upload ảnh cho ghi chú
-- Đồng bộ realtime với Socket.IO
-- Hàng đợi đồng bộ ngoại tuyến khi mất mạng
+| Nhóm chức năng | Chi tiết tính năng trên Android App |
+| :--- | :--- |
+| **Xác thực (Auth)** | • Đăng ký tài khoản mới kèm xác nhận mật khẩu.<br>• Kích hoạt tài khoản qua liên kết email.<br>• Đăng nhập bảo mật JWT, duy trì phiên làm việc.<br>• Quên mật khẩu và đặt lại mật khẩu mới qua email.<br>• Đăng xuất tài khoản an toàn. |
+| **Quản lý Ghi chú (CRUD)** | • Tạo mới ghi chú (tiêu đề, nội dung, ngày tạo).<br>• **Auto-save:** Tự động lưu sau 800ms khi dừng gõ.<br>• Chế độ hiển thị: **Lưới (Staggered Grid)** hoặc **Dòng (List)**.<br>• Sắp xếp theo: **Mới nhất** $\leftrightarrow$ **Cũ nhất**.<br>• Ghim ghi chú ưu tiên lên đầu danh sách.<br>• **Thùng rác:** Xóa mềm, Khôi phục ghi chú, Xóa vĩnh viễn.<br>• Tìm kiếm tức thì theo từ khóa trong tiêu đề và nội dung.<br>• Lọc theo ngày cụ thể (DatePicker) hoặc xem tất cả các ngày. |
+| **Nội dung & Đa phương tiện** | • Hỗ trợ Checklist (phím tắt chèn `[ ] `).<br>• **Nhập giọng nói tiếng Việt:** Chuyển giọng nói thành văn bản nối tiếp vào nội dung.<br>• **Đính kèm ảnh:** Chọn ảnh từ thư viện/máy ảnh, tải lên server và xem ảnh phóng to. |
+| **Bảo vệ Mật khẩu (Note Lock)** | • Khóa riêng từng ghi chú bằng mật khẩu.<br>• Hộp thoại xác thực mật khẩu để mở khóa xem nội dung.<br>• Thiết lập mật khẩu, đổi mật khẩu và hủy khóa bảo vệ. |
+| **Nhãn (Labels)** | • CRUD Nhãn: Tạo mới, đổi tên, chọn màu sắc từ bảng màu và xóa nhãn.<br>• Gán hoặc gỡ nhiều nhãn cho từng ghi chú.<br>• Lọc nhanh danh sách ghi chú theo từng nhãn từ Navigation Drawer. |
+| **Chia sẻ & Cộng tác** | • Tạo liên kết chia sẻ công khai (`share_token`) kèm nút sao chép link.<br>• Mời cộng tác viên qua Email với phân quyền **Chỉ xem (Viewer)** hoặc **Được sửa (Editor)**.<br>• Quản lý danh sách người dùng được chia sẻ và thu hồi quyền.<br>• Mục xem riêng các ghi chú **"Đã chia sẻ với tôi"**. |
+| **Realtime & Ngoại tuyến** | • Đồng bộ Socket.IO: Nhận cập nhật ghi chú ngay lập tức (`note_updated`).<br>• Nhận thông báo hệ thống khi được người khác chia sẻ ghi chú (`note_shared`).<br>• Lưu trữ Room Database cục bộ, xem và chỉnh sửa ghi chú khi mất mạng. |
+| **Hồ sơ & Giao diện** | • Cập nhật họ tên người dùng.<br>• Đổi mật khẩu tài khoản.<br>• Chuyển đổi giao diện **Sáng / Tối (Light / Dark Mode)** tức thì. |
 
 ## Cấu trúc thư mục
 
