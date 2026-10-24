@@ -89,24 +89,47 @@ NoteFlow/
 
 ### 1) Cài đặt BackEnd
 
+#### Lựa chọn A: Chạy Cơ sở dữ liệu bằng Docker (Khuyên dùng)
+Dự án đã tích hợp sẵn cấu hình Docker Compose cho MySQL 8 (tự động nạp bảng và khởi tạo cấu trúc dữ liệu `schema.sql`):
+
 ```bash
 cd BackEnd
+
+# Khởi chạy MySQL container chạy ngầm
+npm run docker:db
+# hoặc: docker compose up -d mysql
+
+# Cài đặt thư viện và chạy server Node.js với hot-reload
 npm install
-```
-
-Tạo file môi trường `BackEnd/.env` (có thể copy từ `.env.example` nếu có) và cấu hình các biến cần thiết như:
-
-- `PORT` (ví dụ `4000`)
-- `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-- `JWT_SECRET`
-- `SMTP_*` (nếu dùng chức năng gửi email)
-- `APP_URL`, `CLIENT_URL` (nếu cần cho luồng chia sẻ/kích hoạt)
-
-Khởi chạy backend:
-
-```bash
 npm run dev
 ```
+
+*Để dừng MySQL container khi không sử dụng:*
+```bash
+npm run docker:db:down
+```
+
+#### Lựa chọn B: Chạy toàn bộ hệ thống bằng Docker (Full Container)
+```bash
+# Khởi động cả MySQL và BackEnd API trong Docker
+npm run docker:up
+# hoặc: docker compose up --build -d
+
+# Xem log thời gian thực:
+npm run docker:logs
+
+# Dừng hệ thống:
+npm run docker:down
+```
+
+Cấu hình file môi trường `BackEnd/.env` (tham khảo mẫu chuẩn tại `BackEnd/.env.example`):
+- `PORT=4000`
+- `DB_HOST=localhost` (khi chạy app ngoài host kết nối vào Docker MySQL) hoặc `DB_HOST=mysql` (khi chạy app bên trong container)
+- `DB_PORT=3306`
+- `DB_USER=root`
+- `DB_PASSWORD=rootpassword`
+- `DB_NAME=noteflow`
+
 
 ## 📱 Cài đặt và Chạy Ứng Dụng Android
 

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: noteflow-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: noteflow
+      MYSQL_USER: noteflow
+      MYSQL_PASSWORD: noteflowpassword
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./BackEnd/sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - noteflow_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./BackEnd
+    container_name: noteflow-backend
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      FRONTEND_URL: http://localhost:3000
+      JWT_SECRET: noteflow-secret
+      JWT_EXPIRES_IN: 7d
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: noteflow
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./BackEnd/src:/app/src
+      - ./BackEnd/uploads:/app/uploads
+      - /app/node_modules
+
+volumes:
+  noteflow_mysql_data:
