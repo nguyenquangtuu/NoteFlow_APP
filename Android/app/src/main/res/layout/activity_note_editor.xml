@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <!-- Top AppBar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/editorToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_notes">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingEnd="12dp">
+
+                <TextView
+                    android:id="@+id/tvSaveStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/saved"
+                    android:textSize="13sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <!-- Pin Action -->
+                <ImageButton
+                    android:id="@+id/btnPin"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/ic_pin"
+                    app:tint="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/pin_note" />
+
+                <!-- Lock Action -->
+                <ImageButton
+                    android:id="@+id/btnLock"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/ic_lock"
+                    app:tint="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/lock_note"
+                    android:layout_marginStart="4dp" />
+
+                <!-- Share Action -->
+                <ImageButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/ic_share"
+                    app:tint="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/share_note"
+                    android:layout_marginStart="4dp" />
+
+                <!-- Attach Label Action -->
+                <ImageButton
+                    android:id="@+id/btnAttachLabel"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/ic_label"
+                    app:tint="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/labels"
+                    android:layout_marginStart="4dp" />
+
+                <!-- Delete Action -->
+                <ImageButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/ic_trash"
+                    app:tint="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/delete_note"
+                    android:layout_marginStart="4dp" />
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/card_stroke_light" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Scrollable Editor Body -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Date Indicator -->
+            <TextView
+                android:id="@+id/tvEditorDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày ghi chú: 24/10/2026"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:padding="4dp" />
+
+            <!-- Labels Chips -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupEditorLabels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:visibility="gone" />
+
+            <!-- Title EditText -->
+            <EditText
+                android:id="@+id/etNoteTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/note_title_hint"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:background="@null"
+                android:layout_marginTop="12dp"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="3" />
+
+            <!-- Attached Images RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
+
+            <!-- Content EditText -->
+            <EditText
+                android:id="@+id/etNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="@string/note_content_hint"
+                android:textSize="16sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textColorHint="?android:attr/textColorSecondary"
+                android:gravity="top|start"
+                android:background="@null"
+                android:layout_marginTop="16dp"
+                android:inputType="textMultiLine|textCapSentences" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Action Bar (Voice, Checklist, Image, Date) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="?android:attr/colorBackground"
+        android:elevation="8dp">
+
+        <!-- Checklist Shortcut Button -->
+        <ImageButton
+            android:id="@+id/btnChecklist"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_check"
+            app:tint="@color/primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Chèn danh sách kiểm tra" />
+
+        <!-- Speech To Text Voice Button -->
+        <ImageButton
+            android:id="@+id/btnVoice"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Nhập giọng nói"
+            android:layout_marginStart="8dp" />
+
+        <!-- Attach Image Button -->
+        <ImageButton
+            android:id="@+id/btnAttachImage"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_image"
+            app:tint="@color/primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Đính kèm ảnh"
+            android:layout_marginStart="8dp" />
+
+        <!-- Change Date Button -->
+        <ImageButton
+            android:id="@+id/btnChangeDate"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_calendar"
+            app:tint="@color/primary"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Đổi ngày ghi chú"
+            android:layout_marginStart="8dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <!-- Recording Indicator -->
+        <TextView
+            android:id="@+id/tvRecordingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đang nghe tiếng Việt..."
+            android:textSize="12sp"
+            android:textColor="@color/danger"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

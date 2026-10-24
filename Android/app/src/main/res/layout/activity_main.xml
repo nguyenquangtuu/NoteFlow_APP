@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main Content -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/windowBackground">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/colorBackground"
+            app:elevation="0dp">
+
+            <!-- Toolbar with Search & Controls -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_notes"
+                app:navigationIconTint="@color/primary">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="8dp">
+
+                    <!-- Search Input -->
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:iconifiedByDefault="false"
+                        app:queryHint="@string/search_notes_hint"
+                        android:background="@drawable/ic_check" />
+
+                    <!-- Toggle View Mode (Grid/List) -->
+                    <ImageButton
+                        android:id="@+id/btnToggleView"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:src="@drawable/ic_grid"
+                        app:tint="?android:attr/textColorPrimary"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Chuyển chế độ xem"
+                        android:layout_marginStart="4dp" />
+
+                    <!-- Sort Order Toggle -->
+                    <ImageButton
+                        android:id="@+id/btnSort"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="?android:attr/textColorPrimary"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Sắp xếp"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <!-- Filter Status Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSectionTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_notes"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvNotesCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 ghi chú"
+                        android:textSize="12sp"
+                        android:textColor="?android:attr/textColorSecondary" />
+                </LinearLayout>
+
+                <!-- Date Filter Button / Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipDateFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_dates"
+                    android:textColor="@color/primary"
+                    app:chipIcon="@drawable/ic_calendar"
+                    app:chipIconTint="@color/primary"
+                    app:chipBackgroundColor="@color/primary_light" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/card_stroke_light" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Notes List with Pull-to-Refresh -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="6dp"
+                    android:clipToPadding="false" />
+
+                <!-- Empty State View -->
+                <LinearLayout
+                    android:id="@+id/layoutEmpty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_notes"
+                        app:tint="?android:attr/textColorSecondary"
+                        android:alpha="0.5" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/empty_notes"
+                        android:textSize="16sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
+
+            </FrameLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- Floating Action Button for New Note -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabNewNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20dp"
+            android:text="@string/new_note"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/white"
+            android:backgroundTint="@color/primary" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Side Navigation Drawer -->
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="?android:attr/colorBackground">
+
+        <!-- User Header -->
+        <LinearLayout
+            android:id="@+id/drawerHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp"
+            android:background="@color/primary_light">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_notes"
+                app:tint="@color/primary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="14dp">
+
+                <TextView
+                    android:id="@+id/tvDrawerUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Người dùng"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/tvDrawerUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="email@example.com"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:singleLine="true" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Navigation Filter Items -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="QUẢN LÝ"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:paddingStart="20dp"
+                    android:paddingBottom="6dp" />
+
+                <!-- All Notes -->
+                <LinearLayout
+                    android:id="@+id/navAllNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:background="?android:attr/selectableItemBackground">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_grid" app:tint="@color/primary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/all_notes" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/primary" android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <!-- Pinned Notes -->
+                <LinearLayout
+                    android:id="@+id/navPinned"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:background="?android:attr/selectableItemBackground">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_pin" app:tint="?android:attr/textColorSecondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pinned_notes" android:textSize="14sp" android:textColor="?android:attr/textColorPrimary" android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <!-- Shared Notes -->
+                <LinearLayout
+                    android:id="@+id/navShared"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:background="?android:attr/selectableItemBackground">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_share" app:tint="?android:attr/textColorSecondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/shared_with_me" android:textSize="14sp" android:textColor="?android:attr/textColorPrimary" android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <!-- Trash -->
+                <LinearLayout
+                    android:id="@+id/navTrash"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:background="?android:attr/selectableItemBackground">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_trash" app:tint="?android:attr/textColorSecondary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/trash" android:textSize="14sp" android:textColor="?android:attr/textColorPrimary" android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <!-- Labels Section Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="NHÃN"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                    <ImageView
+                        android:id="@+id/btnAddLabel"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_add"
+                        app:tint="?android:attr/textColorSecondary"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/add_label" />
+                </LinearLayout>
+
+                <!-- Labels RecyclerView in Drawer -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDrawerLabels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/card_stroke_light" />
+
+        <!-- Drawer Footer: Profile & Logout -->
+        <LinearLayout
+            android:id="@+id/navProfile"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:background="?android:attr/selectableItemBackground">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_settings" app:tint="?android:attr/textColorSecondary" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/profile_and_settings" android:textSize="14sp" android:textColor="?android:attr/textColorPrimary" android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navLogout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:background="?android:attr/selectableItemBackground">
+            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_logout" app:tint="@color/danger" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/logout" android:textSize="14sp" android:textColor="@color/danger" android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

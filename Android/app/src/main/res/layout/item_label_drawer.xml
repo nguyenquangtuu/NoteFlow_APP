@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- Colored Dot -->
+    <View
+        android:id="@+id/viewLabelColor"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:background="@drawable/ic_check" />
+
+    <!-- Label Name -->
+    <TextView
+        android:id="@+id/tvLabelName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Tên nhãn"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_marginStart="14dp"
+        android:singleLine="true" />
+
+    <!-- Note Count Badge -->
+    <TextView
+        android:id="@+id/tvNoteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:layout_marginStart="8dp" />
+
+    <!-- Edit/Options Icon -->
+    <ImageView
+        android:id="@+id/ivLabelMenu"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_settings"
+        android:contentDescription="Sửa nhãn"
+        android:layout_marginStart="12dp"
+        app:tint="?android:attr/textColorSecondary"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+</LinearLayout>
