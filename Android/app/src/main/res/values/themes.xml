@@ -18,15 +18,9 @@
     <!-- Custom Shopee-style Bottom Navigation -->
     <style name="Widget.NoteFlow.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="itemIconSize">22dp</item>
-        <item name="itemActiveIndicatorStyle">@style/Widget.NoteFlow.NoIndicator</item>
+        <item name="itemActiveIndicatorStyle">@null</item>
         <item name="itemTextAppearanceActive">@style/TextAppearance.NoteFlow.BottomNav.Active</item>
         <item name="itemTextAppearanceInactive">@style/TextAppearance.NoteFlow.BottomNav.Inactive</item>
-    </style>
-
-    <style name="Widget.NoteFlow.NoIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@android:color/transparent</item>
-        <item name="android:width">0dp</item>
-        <item name="android:height">0dp</item>
     </style>
 
     <style name="TextAppearance.NoteFlow.BottomNav.Active" parent="TextAppearance.Material3.LabelSmall">
