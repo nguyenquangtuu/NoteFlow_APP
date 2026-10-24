@@ -47,16 +47,37 @@ Hệ thống **NoteFlow** được thiết kế theo kiến trúc Client - Serve
 ## Cấu trúc thư mục
 
 ```text
-GIUA_KY/
-├─ BackEnd/
-│  ├─ src/
-│  ├─ sql/
-│  └─ uploads/
-├─ FrontEnd/
-│  ├─ src/
-│  └─ public/
-└─ README.md
+NoteFlow/
+├── Android/                                      # Mã nguồn ứng dụng Android Native (Java)
+│   ├── app/
+│   │   ├── src/main/
+│   │   │   ├── java/com/noteflow/app/
+│   │   │   │   ├── data/                         # Tầng Data: Api, Local (Room DB), Models, Repositories
+│   │   │   │   ├── realtime/                     # SocketManager (Socket.IO client)
+│   │   │   │   ├── ui/                           # Tầng Giao diện (Auth, Main, Editor, Dialogs, Profile)
+│   │   │   │   └── utils/                        # Tiện ích: Constants, DateTimeUtils, NotificationHelper
+│   │   │   ├── res/                              # Layouts XML, Drawables, Values (Colors, Strings, Themes)
+│   │   │   └── AndroidManifest.xml
+│   │   └── build.gradle
+│   ├── build.gradle
+│   └── settings.gradle
+├── BackEnd/                                      # Mã nguồn máy chủ Node.js + Express
+│   ├── src/
+│   │   ├── config/                               # Cấu hình Database & Mailer
+│   │   ├── middleware/                           # Auth Middleware JWT
+│   │   ├── routes/                               # Auth, Users, Notes, Labels, Notifications
+│   │   └── index.js
+│   ├── sql/schema.sql                            # Schema cơ sở dữ liệu MySQL
+│   └── package.json
+└── README.md
 ```
+
+---
+
+## 👨‍💻 Tác giả & Giấy phép
+- **Tác giả:** Nguyen Quang Tuu ([@nguyenquangtuu](https://github.com/nguyenquangtuu))
+- **Dự án:** NoteFlow - Ứng dụng ghi chú thông minh đa nền tảng.
+- **Giấy phép:** MIT License.
 
 ## Yêu cầu môi trường
 
