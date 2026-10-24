@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">NoteFlow</string>
+    <string name="app_tagline">Ghi chú thông minh</string>
+
+    <!-- Auth -->
+    <string name="login">Đăng nhập</string>
+    <string name="register">Đăng ký</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="full_name">Họ và tên</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="reset_password">Đặt lại mật khẩu</string>
+    <string name="dont_have_account">Chưa có tài khoản? Đăng ký ngay</string>
+    <string name="already_have_account">Đã có tài khoản? Đăng nhập</string>
+    <string name="login_success">Đăng nhập thành công</string>
+    <string name="register_success">Đăng ký thành công! Vui lòng kiểm tra email kích hoạt.</string>
+
+    <!-- Main Dashboard -->
+    <string name="all_notes">Tất cả ghi chú</string>
+    <string name="pinned_notes">Đã ghim</string>
+    <string name="shared_with_me">Đã chia sẻ với tôi</string>
+    <string name="trash">Thùng rác</string>
+    <string name="labels">Nhãn</string>
+    <string name="search_notes_hint">Tìm kiếm ghi chú...</string>
+    <string name="empty_notes">Chưa có ghi chú nào</string>
+    <string name="empty_trash">Thùng rác trống</string>
+    <string name="notes_count">%d ghi chú hiện có</string>
+    <string name="all_dates">Tất cả các ngày</string>
+    <string name="filter_by_date">Ngày: %s</string>
+    <string name="sort_newest">Mới nhất</string>
+    <string name="sort_oldest">Cũ nhất</string>
+
+    <!-- Note Editor -->
+    <string name="new_note">Ghi chú mới</string>
+    <string name="edit_note">Chỉnh sửa ghi chú</string>
+    <string name="note_title_hint">Tiêu đề ghi chú...</string>
+    <string name="note_content_hint">Bắt đầu nhập nội dung ghi chú ở đây...</string>
+    <string name="saving">Đang lưu...</string>
+    <string name="saved">Đã lưu</string>
+    <string name="save_offline">Đã lưu ngoại tuyến</string>
+    <string name="pin_note">Ghim</string>
+    <string name="unpin_note">Bỏ ghim</string>
+    <string name="delete_note">Chuyển vào thùng rác</string>
+    <string name="restore_note">Khôi phục ghi chú</string>
+    <string name="delete_permanently">Xóa vĩnh viễn</string>
+
+    <!-- Labels -->
+    <string name="add_label">Thêm nhãn</string>
+    <string name="edit_label">Sửa nhãn</string>
+    <string name="label_name">Tên nhãn</string>
+    <string name="label_color">Màu sắc</string>
+    <string name="delete_label_confirm">Bạn có chắc chắn muốn xóa nhãn này?</string>
+
+    <!-- Note Password Lock -->
+    <string name="lock_note">Bảo vệ bằng mật khẩu</string>
+    <string name="unlock_note">Mở khóa ghi chú</string>
+    <string name="enter_note_password">Nhập mật khẩu để mở khóa ghi chú</string>
+    <string name="current_password">Mật khẩu hiện tại</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="enable_password">Thiết lập mật khẩu</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="disable_password">Gỡ bỏ mật khẩu</string>
+    <string name="password_incorrect">Mật khẩu không chính xác</string>
+
+    <!-- Sharing -->
+    <string name="share_note">Chia sẻ ghi chú</string>
+    <string name="public_share">Chia sẻ liên kết công khai</string>
+    <string name="copy_link">Sao chép liên kết</string>
+    <string name="link_copied">Đã sao chép liên kết vào bộ nhớ tạm</string>
+    <string name="invite_user">Mời qua email</string>
+    <string name="permission_viewer">Chỉ xem (Viewer)</string>
+    <string name="permission_editor">Chỉnh sửa (Editor)</string>
+    <string name="permission_none">Tắt chia sẻ công khai</string>
+    <string name="access_list">Danh sách người có quyền truy cập</string>
+    <string name="revoke_access">Thu hồi quyền</string>
+
+    <!-- Profile -->
+    <string name="profile_and_settings">Hồ sơ và cài đặt</string>
+    <string name="save_changes">Lưu thay đổi</string>
+    <string name="theme_setting">Giao diện (Sáng / Tối)</string>
+    <string name="change_account_password">Đổi mật khẩu tài khoản</string>
+
+    <!-- Common -->
+    <string name="cancel">Hủy</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="delete">Xóa</string>
+    <string name="save">Lưu</string>
+    <string name="retry">Thử lại</string>
+    <string name="error_occurred">Đã xảy ra lỗi, vui lòng thử lại.</string>
+</resources>
