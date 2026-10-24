@@ -1,32 +1,35 @@
-# NoteFlow
+# NoteFlow - Ứng dụng Ghi chú Thông minh
 
-Ứng dụng ghi chú theo ngày, hỗ trợ tiếng Việt, chia sẻ cộng tác và đồng bộ thời gian thực.
+Ứng dụng ghi chú thông minh đa nền tảng theo ngày, hỗ trợ tiếng Việt, bảo vệ mật khẩu, đính kèm đa phương tiện, chia sẻ cộng tác và đồng bộ thời gian thực.
 
-## Tổng quan
+## 🌟 Tổng quan dự án
 
-Repository này gồm 2 phần chính:
+Hệ thống **NoteFlow** được thiết kế theo kiến trúc Client - Server chuẩn hiện đại:
 
-- **FrontEnd**: Next.js + TypeScript (giao diện người dùng)
-- **BackEnd**: Node.js + Express + Socket.IO + MySQL (API, xác thực, realtime)
+- **Android App (`Android/`)**: Ứng dụng Android Native viết bằng **Java (JDK 17)** theo mô hình **MVVM**, Material Design 3, tích hợp lưu trữ offline **Room Database**, nhập giọng nói tiếng Việt và đồng bộ thời gian thực với **Socket.IO**.
+- **BackEnd (`BackEnd/`)**: RESTful API & Realtime Server xây dựng trên **Node.js + Express 5 + MySQL + Socket.IO**, xác thực bảo mật JWT Bearer Token, gửi email kích hoạt Nodemailer và tải ảnh Multer.
 
-## Công nghệ sử dụng
+---
 
-### FrontEnd
-- Next.js 16
-- React 19
-- TypeScript
-- socket.io-client
-- dayjs
-- lucide-react
+## 🛠️ Công nghệ sử dụng
 
-### BackEnd
-- Node.js + Express 5
-- MySQL (mysql2)
-- Socket.IO
-- JWT (jsonwebtoken)
-- bcryptjs
-- nodemailer
-- multer
+### 1. Android Application (Native Java)
+- **Ngôn ngữ:** Java (JDK 17)
+- **Kiến trúc:** MVVM (Model - View - ViewModel) + Repository Pattern
+- **Giao diện:** XML Layouts + ViewBinding + Google Material Components 3
+- **Mạng (Networking):** Retrofit 2 + OkHttp 3 + Gson Converter
+- **Cơ sở dữ liệu cục bộ (Local Cache):** Android Room Database (SQLite) + EncryptedSharedPreferences
+- **Thời gian thực (Realtime):** Socket.IO Client Java (`io.socket:socket.io-client`)
+- **Tải ảnh (Image Loading):** Glide 4
+- **Giọng nói (Speech-to-Text):** Android Native `SpeechRecognizer` (Ngôn ngữ tiếng Việt `vi-VN`)
+
+### 2. BackEnd Server
+- **Nền tảng:** Node.js (v18+) + Express 5
+- **Cơ sở dữ liệu:** MySQL 8 (mysql2)
+- **Realtime:** Socket.IO Server
+- **Bảo mật:** JSON Web Token (JWT), bcryptjs mã hóa mật khẩu
+- **Xử lý tệp & Đa phương tiện:** Multer multipart/form-data
+- **Dịch vụ Email:** Nodemailer SMTP (Kích hoạt tài khoản, đặt lại mật khẩu)
 
 ## Tính năng hiện có
 
