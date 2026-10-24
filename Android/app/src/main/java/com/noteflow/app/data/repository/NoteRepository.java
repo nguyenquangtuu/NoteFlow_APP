@@ -35,6 +35,14 @@ import retrofit2.Response;
 
 public class NoteRepository {
 
+    private static NoteRepository instance;
+    public static synchronized NoteRepository getInstance(Context context) {
+        if (instance == null) {
+            instance = new NoteRepository(context.getApplicationContext());
+        }
+        return instance;
+    }
+
     private final ApiService apiService;
     private final NoteDao noteDao;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -173,6 +181,10 @@ public class NoteRepository {
     }
 
     // Password Lock API
+    public void getNoteDetail(String id, String password, Callback<NoteDetailResponse> callback) {
+        verifyNotePassword(id, password, callback);
+    }
+
     public void verifyNotePassword(String id, String password, Callback<NoteDetailResponse> callback) {
         Map<String, String> body = new HashMap<>();
         body.put("password", password);

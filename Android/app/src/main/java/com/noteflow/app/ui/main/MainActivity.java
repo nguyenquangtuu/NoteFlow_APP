@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             }
         });
 
-        viewModel.getErrorMessage().observe(this, error -> {
+        viewModel.getMessage().observe(this, error -> {
             if (error != null && !error.isEmpty()) {
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
             }
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             new AlertDialog.Builder(this)
                     .setTitle(note.getTitle())
                     .setItems(options, (dialog, which) -> {
-                        if (which == 0) viewModel.restoreNote(note.getId());
+                        if (which == 0) viewModel.restoreNote(note);
                         else if (which == 1) confirmPermanentDelete(note);
                     })
                     .show();
@@ -337,16 +337,16 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
                     .setItems(options, (dialog, which) -> {
                         switch (which) {
                             case 0:
-                                viewModel.togglePin(note.getId());
+                                viewModel.togglePin(note);
                                 break;
                             case 1:
                                 handlePasswordManagement(note);
                                 break;
                             case 2:
-                                ShareBottomSheet.newInstance(note.getId(), note.getTitle(), note.getPublicPermission()).show(getSupportFragmentManager(), "share_bottom_sheet");
+                                new ShareBottomSheet(note.getId()).show(getSupportFragmentManager(), "share_bottom_sheet");
                                 break;
                             case 3:
-                                viewModel.moveToTrash(note.getId());
+                                viewModel.deleteNote(note, null);
                                 break;
                         }
                     })
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
         new AlertDialog.Builder(this)
                 .setTitle("Xóa vĩnh viễn")
                 .setMessage("Ghi chú này sẽ bị xóa hoàn toàn và không thể khôi phục. Bạn có chắc không?")
-                .setPositiveButton("Xóa luôn", (dialog, which) -> viewModel.deletePermanently(note.getId()))
+                .setPositiveButton("Xóa luôn", (dialog, which) -> viewModel.deletePermanently(note, null))
                 .setNegativeButton("Hủy", null)
                 .show();
     }
@@ -369,15 +369,45 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             @Override public void onUnlock(String password) {}
             @Override
             public void onEnable(String password, String confirm) {
-                viewModel.enablePassword(note.getId(), password, confirm);
+                NoteRepository.getInstance(MainActivity.this).enableNotePassword(note.getId(), password, confirm, new Callback<NoteDetailResponse>() {
+                    @Override
+                    public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getNote() != null) {
+                            viewModel.updateNoteInList(response.body().getNote());
+                            Toast.makeText(MainActivity.this, "Đã thiết lập mật khẩu bảo vệ!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override public void onFailure(Call<NoteDetailResponse> call, Throwable t) {}
+                });
             }
             @Override
             public void onChange(String currentPassword, String newPassword, String confirmNew) {
-                viewModel.changePassword(note.getId(), currentPassword, newPassword, confirmNew);
+                NoteRepository.getInstance(MainActivity.this).changeNotePassword(note.getId(), currentPassword, newPassword, confirmNew, new Callback<NoteDetailResponse>() {
+                    @Override
+                    public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Đã đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Mật khẩu hiện tại không đúng.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override public void onFailure(Call<NoteDetailResponse> call, Throwable t) {}
+                });
             }
             @Override
             public void onDisable(String currentPassword) {
-                viewModel.disablePassword(note.getId(), currentPassword);
+                NoteRepository.getInstance(MainActivity.this).disableNotePassword(note.getId(), currentPassword, new Callback<NoteDetailResponse>() {
+                    @Override
+                    public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getNote() != null) {
+                            viewModel.updateNoteInList(response.body().getNote());
+                            Toast.makeText(MainActivity.this, "Đã gỡ bỏ mật khẩu bảo vệ!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Mật khẩu không đúng.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override public void onFailure(Call<NoteDetailResponse> call, Throwable t) {}
+                });
             }
         });
         dialog.show();

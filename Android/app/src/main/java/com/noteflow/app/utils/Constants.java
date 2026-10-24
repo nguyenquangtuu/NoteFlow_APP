@@ -23,4 +23,5 @@ public class Constants {
     public static final String EXTRA_NOTE_ID = "extra_note_id";
     public static final String EXTRA_IS_READ_ONLY = "extra_is_read_only";
     public static final String EXTRA_NOTE_DATE = "extra_note_date";
+    public static final String EXTRA_NOTE_PASSWORD = "extra_note_password";
 }

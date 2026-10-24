@@ -7,7 +7,7 @@
     <item
         android:id="@+id/nav_pinned"
         android:icon="@drawable/ic_pin"
-        android:title="Đã ghim" />
+        android:title="Ghim" />
     <item
         android:id="@+id/nav_shared"
         android:icon="@drawable/ic_share"
@@ -15,7 +15,7 @@
     <item
         android:id="@+id/nav_trash"
         android:icon="@drawable/ic_trash"
-        android:title="Thùng rác" />
+        android:title="Rác" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_settings"

@@ -39,4 +39,8 @@ public class DateTimeUtils {
         } catch (Exception ignored) {}
         return isoString;
     }
+
+    public static String formatDateVi(String apiDate) {
+        return formatDisplayDate(apiDate);
+    }
 }
