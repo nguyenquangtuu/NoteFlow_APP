@@ -15,20 +15,19 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <!-- Custom Shopee-style Bottom Navigation -->
-    <style name="Widget.NoteFlow.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+    <!-- Custom Shopee-style Bottom Navigation (Classic Material Design with tight icon-text gap) -->
+    <style name="Widget.NoteFlow.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconSize">22dp</item>
-        <item name="itemActiveIndicatorStyle">@null</item>
         <item name="itemTextAppearanceActive">@style/TextAppearance.NoteFlow.BottomNav.Active</item>
         <item name="itemTextAppearanceInactive">@style/TextAppearance.NoteFlow.BottomNav.Inactive</item>
     </style>
 
-    <style name="TextAppearance.NoteFlow.BottomNav.Active" parent="TextAppearance.Material3.LabelSmall">
+    <style name="TextAppearance.NoteFlow.BottomNav.Active" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.NoteFlow.BottomNav.Inactive" parent="TextAppearance.Material3.LabelSmall">
+    <style name="TextAppearance.NoteFlow.BottomNav.Inactive" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">normal</item>
     </style>

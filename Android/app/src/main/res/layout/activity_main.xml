@@ -138,7 +138,7 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="56dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
@@ -192,7 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="72dp"
         android:text="@string/new_note"
         android:textColor="@color/white"
         app:icon="@drawable/ic_add"
@@ -205,7 +205,7 @@
         android:id="@+id/bottomNavigation"
         style="@style/Widget.NoteFlow.BottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
         android:background="?android:attr/colorBackground"
         app:elevation="12dp"
