@@ -127,16 +127,43 @@ npm run dev
 2. Cấu hình đúng thông tin DB trong `BackEnd/.env`.
 3. Import `BackEnd/sql/schema.sql` nếu bạn muốn khởi tạo thủ công.
 
-## Ghi chú phát triển
+## 🌐 Hệ thống API & Realtime Socket.IO
 
-- Realtime được xử lý qua Socket.IO giữa backend và frontend.
-- Khi mất kết nối, frontend lưu tác vụ vào hàng đợi offline và tự đồng bộ lại khi online.
-- Nếu cần kiểm tra nhanh:
-  - Frontend: `npm run lint`, `npm run build`
-  - Backend: `npm run dev` để test runtime API
+### 1) RESTful API Endpoints (`/api`)
+* **Xác thực (`/auth`):**
+  * `POST /auth/register`: Đăng ký tài khoản (`fullName`, `email`, `password`, `confirmPassword`).
+  * `POST /auth/login`: Đăng nhập hệ thống $\rightarrow$ nhận JWT Token.
+  * `POST /auth/activate`: Kích hoạt tài khoản bằng mã gửi qua email.
+  * `POST /auth/forgot-password` & `POST /auth/reset-password`: Quên và đặt lại mật khẩu.
+  * `POST /auth/change-password`: Đổi mật khẩu tài khoản (Header `Authorization`).
+* **Quản lý Hồ sơ (`/users`):**
+  * `GET /users/profile`: Lấy thông tin cá nhân và preferences.
+  * `PUT /users/profile`: Cập nhật họ tên, giao diện sáng/tối.
+* **Quản lý Nhãn (`/labels`):**
+  * `GET /labels`: Lấy danh sách nhãn kèm số lượng ghi chú.
+  * `POST /labels`: Tạo nhãn mới (`name`, mã màu `color`).
+  * `PUT /labels/:id`: Cập nhật tên và màu sắc của nhãn.
+  * `DELETE /labels/:id`: Xóa nhãn.
+* **Quản lý Ghi chú (`/notes`):**
+  * `GET /notes`: Lấy danh sách ghi chú (hỗ trợ lọc theo `date`, `search`, `labelId`, `includeDeleted`, `sharedWithMe`).
+  * `POST /notes`: Tạo ghi chú mới (`title`, `content`, `noteDate`, `labelIds`, `notePassword`).
+  * `PUT /notes/:id`: Cập nhật ghi chú và auto-save.
+  * `DELETE /notes/:id`: Chuyển ghi chú vào thùng rác.
+  * `DELETE /notes/:id/permanent`: Xóa vĩnh viễn ghi chú.
+  * `POST /notes/:id/password/verify`: Mở khóa ghi chú được bảo vệ.
+  * `POST /notes/:id/password/enable`: Thiết lập mật khẩu cho ghi chú.
+  * `PUT /notes/:id/password`: Đổi mật khẩu bảo vệ ghi chú.
+  * `POST /notes/:id/password/disable`: Hủy bảo vệ mật khẩu ghi chú.
+  * `POST /notes/:id/images`: Tải ảnh đính kèm (Multipart upload).
+  * `POST /notes/:id/share`: Tạo link chia sẻ công khai.
+  * `GET /notes/:id/shares`: Xem danh sách phân quyền chia sẻ.
+  * `PUT /notes/:id/shares/public`: Cập nhật quyền công khai (`viewer`, `editor`, `none`).
+  * `POST /notes/:id/shares/user`: Mời người dùng qua email với quyền tương ứng.
+  * `DELETE /notes/:id/shares/user/:email`: Thu hồi quyền truy cập của người dùng.
 
-## Hướng mở rộng đề xuất
-
-- Thêm endpoint lấy chi tiết 1 ghi chú (`GET /notes/:id`) để tối ưu đồng bộ khi mở note.
-- Thêm test tự động (unit/integration) cho luồng auth và notes.
-- Chuẩn hóa logging + observability cho realtime events.
+### 2) Sự kiện Realtime (Socket.IO)
+* Kết nối: `http://<SERVER_HOST>:4000?userId=<USER_ID>`
+* Room cá nhân: `user_${userId}`
+* Sự kiện lắng nghe:
+  * `note_updated`: Cập nhật ghi chú tức thì trên giao diện khi có chỉnh sửa.
+  * `note_shared`: Nhận thông báo hệ thống khi được người khác chia sẻ ghi chú mới.
