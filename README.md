@@ -87,26 +87,39 @@ Khởi chạy backend:
 npm run dev
 ```
 
-### 2) Cài đặt FrontEnd
+## 📱 Cài đặt và Chạy Ứng Dụng Android
 
+### 1) Yêu cầu môi trường
+- **Android Studio:** Phiên bản Iguana / Jellyfish / Koala / Ladybug hoặc mới hơn.
+- **JDK:** Java 17 (mặc định tích hợp sẵn trong Android Studio).
+- **Android SDK:** Compile SDK 34, Min SDK 26 (Android 8.0 trở lên).
+
+### 2) Mở Project trong Android Studio
+1. Mở Android Studio, chọn **Open** (hoặc **File > Open**).
+2. Duyệt đến thư mục `Android` trong repository (`.../NoteFlow/Android`) và nhấn **OK**.
+3. Chờ Android Studio và Gradle tải các gói phụ thuộc và hoàn tất quá trình Sync.
+
+### 3) Cấu hình địa chỉ IP kết nối Backend
+Mở file [Constants.java](file:///Android/app/src/main/java/com/noteflow/app/utils/Constants.java):
+```java
+// Khi chạy trên máy ảo Android Emulator:
+public static final String SERVER_HOST = "http://10.0.2.2:4000";
+
+// Khi chạy trên thiết bị thật (cắm cáp USB hoặc chung WiFi với máy tính):
+// Thay bằng IPv4 của máy tính (xem bằng lệnh ipconfig trong cmd):
+// public static final String SERVER_HOST = "http://192.168.1.xxx:4000";
+```
+
+### 4) Cài đặt & Khởi chạy BackEnd Server
 ```bash
-cd FrontEnd
+cd BackEnd
 npm install
-```
-
-Tạo file `FrontEnd/.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:4000/api
-```
-
-Khởi chạy frontend:
-
-```bash
 npm run dev
 ```
 
-Mặc định frontend chạy tại `http://localhost:3000`.
+### 5) Chạy Ứng dụng Android
+- Chọn thiết bị máy ảo hoặc thiết bị thật trên thanh công cụ Android Studio.
+- Nhấn nút **Run 'app'** (phím tắt `Shift + F10`) để build và khởi chạy ứng dụng NoteFlow.
 
 ## Cơ sở dữ liệu
 
