@@ -17,7 +17,21 @@ async function query(sql, params = []) {
   return rows;
 }
 
+async function waitForConnection(maxRetries = 10, delayMs = 2000) {
+  for (let i = 1; i <= maxRetries; i++) {
+    try {
+      await pool.query("SELECT 1");
+      return;
+    } catch (err) {
+      if (i === maxRetries) throw err;
+      console.log(`Đang chờ cơ sở dữ liệu sẵn sàng (lần thử ${i}/${maxRetries})...`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
 async function initDatabase() {
+  await waitForConnection();
   await query(`ALTER DATABASE \`${process.env.DB_NAME || "noteflow"}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
 
   await query(`
