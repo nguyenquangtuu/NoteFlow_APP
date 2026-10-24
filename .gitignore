@@ -1,0 +1,63 @@
+# ==========================================
+# FrontEnd (Excluded as requested)
+# ==========================================
+FrontEnd/
+
+# ==========================================
+# Android & Gradle Build Files
+# ==========================================
+.gradle/
+build/
+*/build/
+app/build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log files
+*.log
+
+# Android Studio / IntelliJ IDEA
+*.iml
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (if applicable)
+google-services.json
+
+# Profiling and captures
+captures/
+.externalNativeBuild/
+.cxx/
+
+# APKs and App Bundles
+*.apk
+*.aab
+
+# ==========================================
+# Backend & Node.js
+# ==========================================
+BackEnd/node_modules/
+BackEnd/.env
+BackEnd/uploads/*
+!BackEnd/uploads/.gitkeep
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
