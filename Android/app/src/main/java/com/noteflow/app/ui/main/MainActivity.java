@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
         if (searchPlate != null) {
             searchPlate.setBackgroundColor(Color.TRANSPARENT);
         }
+        binding.searchView.clearFocus();
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             });
             dialog.show();
         } else {
-            openNoteEditor(note.getId(), null);
+            openNoteEditor(note, null);
         }
     }
 
@@ -292,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
             @Override
             public void onResponse(Call<NoteDetailResponse> call, Response<NoteDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getNote() != null) {
-                    openNoteEditor(noteId, password);
+                    openNoteEditor(response.body().getNote(), password);
                 } else {
                     Toast.makeText(MainActivity.this, "Mật khẩu không chính xác.", Toast.LENGTH_SHORT).show();
                 }
@@ -305,9 +306,13 @@ public class MainActivity extends AppCompatActivity implements SocketManager.Soc
         });
     }
 
-    private void openNoteEditor(String noteId, String password) {
+    private void openNoteEditor(Note note, String password) {
         Intent intent = new Intent(this, NoteEditorActivity.class);
-        intent.putExtra(Constants.EXTRA_NOTE_ID, noteId);
+        intent.putExtra(Constants.EXTRA_NOTE_ID, note.getId());
+        intent.putExtra("extra_note_data", note);
+        if (note.isSharedWithMe() && "viewer".equalsIgnoreCase(note.getSharedPermission())) {
+            intent.putExtra(Constants.EXTRA_IS_READ_ONLY, true);
+        }
         if (password != null) {
             intent.putExtra(Constants.EXTRA_NOTE_PASSWORD, password);
         }

@@ -1,6 +1,6 @@
-# NoteFlow Android Application (Java)
+# Xây dựng hệ thống quản lý nhật ký theo thời gian thực - NoteFlow (Android)
 
-Ứng dụng ghi chú thông minh NoteFlow dành cho hệ điều hành Android, được xây dựng hoàn toàn bằng **Java**, tuân thủ kiến trúc **MVVM (Model - View - ViewModel)** và dùng chung 100% hệ thống REST API & Realtime Socket.IO của Backend NoteFlow.
+Ứng dụng quản lý nhật ký theo thời gian thực NoteFlow dành cho hệ điều hành Android, được xây dựng hoàn toàn bằng **Java**, tuân thủ kiến trúc **MVVM (Model - View - ViewModel)** và dùng chung 100% hệ thống REST API & Realtime Socket.IO của Backend NoteFlow.
 
 ---
 

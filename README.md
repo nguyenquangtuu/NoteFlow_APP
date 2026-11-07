@@ -1,6 +1,6 @@
-# NoteFlow - Ứng dụng Ghi chú Thông minh
+# Xây dựng hệ thống quản lý nhật ký theo thời gian thực - NoteFlow
 
-Ứng dụng ghi chú thông minh đa nền tảng theo ngày, hỗ trợ tiếng Việt, bảo vệ mật khẩu, đính kèm đa phương tiện, chia sẻ cộng tác và đồng bộ thời gian thực.
+Hệ thống quản lý nhật ký và ghi chú thông minh theo thời gian thực trên nền tảng Android, hỗ trợ quản lý theo ngày, nhập giọng nói tiếng Việt, bảo vệ mật khẩu riêng tư, đính kèm đa phương tiện, chia sẻ cộng tác và đồng bộ trực tiếp.
 
 ## 🌟 Tổng quan dự án
 
@@ -76,7 +76,7 @@ NoteFlow/
 
 ## 👨‍💻 Tác giả & Giấy phép
 - **Tác giả:** Nguyen Quang Tuu ([@nguyenquangtuu](https://github.com/nguyenquangtuu))
-- **Dự án:** NoteFlow - Ứng dụng ghi chú thông minh đa nền tảng.
+- **Dự án:** Xây dựng hệ thống quản lý nhật ký theo thời gian thực - NoteFlow.
 - **Giấy phép:** MIT License.
 
 ## Yêu cầu môi trường

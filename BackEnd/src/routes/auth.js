@@ -109,7 +109,7 @@ router.post("/login", async (req, res) => {
         fullName: user.full_name,
         email: user.email,
         avatarUrl: user.avatar_url,
-        preferences: user.preferences ? JSON.parse(user.preferences) : null,
+        preferences: typeof user.preferences === "string" ? JSON.parse(user.preferences) : (user.preferences || null),
         isActive: Boolean(user.is_active),
       },
     });
@@ -185,7 +185,7 @@ router.get("/me", authMiddleware, async (req, res) => {
       fullName: req.user.full_name,
       email: req.user.email,
       avatarUrl: req.user.avatar_url,
-      preferences: req.user.preferences ? JSON.parse(req.user.preferences) : null,
+      preferences: typeof req.user.preferences === "string" ? JSON.parse(req.user.preferences) : (req.user.preferences || null),
       isActive: Boolean(req.user.is_active),
     },
   });

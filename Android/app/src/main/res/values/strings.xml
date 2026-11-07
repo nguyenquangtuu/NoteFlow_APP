@@ -70,8 +70,8 @@
     <string name="copy_link">Sao chép liên kết</string>
     <string name="link_copied">Đã sao chép liên kết vào bộ nhớ tạm</string>
     <string name="invite_user">Mời qua email</string>
-    <string name="permission_viewer">Chỉ xem (Viewer)</string>
-    <string name="permission_editor">Chỉnh sửa (Editor)</string>
+    <string name="permission_viewer">Chỉ xem</string>
+    <string name="permission_editor">Chỉnh sửa</string>
     <string name="permission_none">Tắt chia sẻ công khai</string>
     <string name="access_list">Danh sách người có quyền truy cập</string>
     <string name="revoke_access">Thu hồi quyền</string>

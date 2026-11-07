@@ -45,6 +45,7 @@ public class NoteEditorViewModel extends AndroidViewModel {
         super(application);
         this.noteRepository = new NoteRepository(application);
         this.labelRepository = new LabelRepository(application);
+        this.labelRepository.fetchLabels(null);
     }
 
     public LiveData<Note> getCurrentNote() { return currentNote; }
@@ -88,6 +89,7 @@ public class NoteEditorViewModel extends AndroidViewModel {
     }
 
     public void saveNote(boolean isSyncNow) {
+        if (Boolean.TRUE.equals(isDeleted.getValue())) return;
         Note note = currentNote.getValue();
         if (note == null) return;
 
@@ -258,6 +260,9 @@ public class NoteEditorViewModel extends AndroidViewModel {
     }
 
     public void deleteNote(String password) {
+        if (autoSaveRunnable != null) {
+            autoSaveHandler.removeCallbacks(autoSaveRunnable);
+        }
         Note note = currentNote.getValue();
         if (note == null || note.getId() == null) {
             isDeleted.setValue(true);

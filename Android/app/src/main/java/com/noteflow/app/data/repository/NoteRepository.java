@@ -231,7 +231,12 @@ public class NoteRepository {
     public void updatePublicPermission(String noteId, String permission, Callback<ApiResponse> callback) {
         Map<String, String> body = new HashMap<>();
         body.put("permission", permission);
-        apiService.updatePublicPermission(noteId, body).enqueue(callback);
+        Call<ApiResponse> call = apiService.updatePublicPermission(noteId, body);
+        if (callback != null) call.enqueue(callback);
+        else call.enqueue(new Callback<ApiResponse>() {
+            @Override public void onResponse(Call<ApiResponse> c, Response<ApiResponse> r) {}
+            @Override public void onFailure(Call<ApiResponse> c, Throwable t) {}
+        });
     }
 
     public void addShareUser(String noteId, String email, String permission, Callback<ApiResponse> callback) {

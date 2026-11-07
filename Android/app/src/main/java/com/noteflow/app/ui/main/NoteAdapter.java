@@ -95,7 +95,7 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteViewHolder> {
             binding.tvTitle.setText(note.getTitle().isEmpty() ? "(Không có tiêu đề)" : note.getTitle());
 
             if (note.isPasswordProtected()) {
-                binding.tvContent.setText("🔒 Nội dung đã được bảo vệ bằng mật khẩu.");
+                binding.tvContent.setText("Nội dung đã được bảo vệ bằng mật khẩu.");
             } else {
                 String contentSnippet = note.getContent();
                 if (contentSnippet.length() > 150) {

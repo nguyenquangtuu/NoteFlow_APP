@@ -214,15 +214,34 @@ router.post("/shared/:token/join", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const view = req.query.view;
-  const includeDeleted = view === "all" ? "all" : view === "trash" ? 1 : 0;
+  const includeDeleted =
+    req.query.includeDeleted !== undefined
+      ? req.query.includeDeleted === "all"
+        ? "all"
+        : Number(req.query.includeDeleted)
+      : view === "all"
+        ? "all"
+        : view === "trash"
+          ? 1
+          : 0;
+
+  const includeShared =
+    req.query.includeShared !== undefined
+      ? Number(req.query.includeShared) === 1
+      : view === "all";
+
+  const sharedWithMe =
+    req.query.sharedWithMe !== undefined
+      ? Number(req.query.sharedWithMe) === 1
+      : view === "shared";
 
   const notes = await getNotes(req.user.id, req.user.email, {
     date: req.query.date,
     search: req.query.search,
     labelId: req.query.labelId,
     includeDeleted,
-    includeShared: view === "all",
-    sharedWithMe: view === "shared",
+    includeShared,
+    sharedWithMe,
   });
 
   return res.json({ notes });
@@ -443,7 +462,7 @@ router.put("/:id", async (req, res) => {
       isDeleted === undefined ? currentRows[0].is_deleted : isDeleted ? 1 : 0,
       isPasswordProtected,
       notePasswordHash,
-      JSON.stringify(images ?? (currentRows[0].images ? JSON.parse(currentRows[0].images) : [])),
+      JSON.stringify(images ?? (typeof currentRows[0].images === "string" ? JSON.parse(currentRows[0].images) : (currentRows[0].images || []))),
       req.user.full_name,
       req.params.id,
     ],
@@ -597,7 +616,7 @@ router.post("/:id/images", upload.single("image"), async (req, res) => {
     return res.status(400).json({ message: "Vui lòng chọn ảnh để tải lên." });
   }
 
-  const existingImages = rows[0].images ? JSON.parse(rows[0].images) : [];
+  const existingImages = typeof rows[0].images === "string" ? JSON.parse(rows[0].images) : (rows[0].images || []);
   const imagePath = `/uploads/${req.file.filename}`;
   existingImages.push(imagePath);
 

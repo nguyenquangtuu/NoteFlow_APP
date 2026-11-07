@@ -49,6 +49,7 @@ public class NoteEditorActivity extends AppCompatActivity {
     private NoteEditorViewModel viewModel;
     private ImageGalleryAdapter imageAdapter;
     private boolean isReadOnly = false;
+    private boolean isUpdatingUi = false;
 
     // Speech-To-Text
     private SpeechRecognizer speechRecognizer;
@@ -103,7 +104,9 @@ public class NoteEditorActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        viewModel.saveNote(true);
+        if (!Boolean.TRUE.equals(viewModel.getIsDeleted().getValue())) {
+            viewModel.saveNote(true);
+        }
         if (speechRecognizer != null) {
             speechRecognizer.stopListening();
         }
@@ -166,12 +169,14 @@ public class NoteEditorActivity extends AppCompatActivity {
     private void setupObservers() {
         viewModel.getCurrentNote().observe(this, note -> {
             if (note != null) {
+                isUpdatingUi = true;
                 if (!binding.etNoteTitle.getText().toString().equals(note.getTitle())) {
                     binding.etNoteTitle.setText(note.getTitle());
                 }
                 if (!binding.etNoteContent.getText().toString().equals(note.getContent())) {
                     binding.etNoteContent.setText(note.getContent());
                 }
+                isUpdatingUi = false;
 
                 binding.btnPin.setColorFilter(note.isPinned()
                         ? ContextCompat.getColor(this, R.color.pin_color)
@@ -209,6 +214,10 @@ public class NoteEditorActivity extends AppCompatActivity {
         viewModel.getIsDeleted().observe(this, isDeleted -> {
             if (isDeleted) finish();
         });
+
+        viewModel.getAllLabels().observe(this, labels -> {
+            // Keep Room LiveData active so viewModel.getAllLabels().getValue() is populated when AttachLabelsDialog opens
+        });
     }
 
     private void renderLabels(List<Label> labels) {
@@ -241,7 +250,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         TextWatcher autoSaveWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!isReadOnly) {
+                if (!isReadOnly && !isUpdatingUi) {
                     viewModel.onTextChanged(
                             binding.etNoteTitle.getText().toString(),
                             binding.etNoteContent.getText().toString()
