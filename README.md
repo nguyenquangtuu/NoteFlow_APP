@@ -2,94 +2,51 @@
 
 Repository: [https://github.com/nguyenquangtuu/NoteFlow_APP.git](https://github.com/nguyenquangtuu/NoteFlow_APP.git)
 
----
+## 1. Thông tin nhóm & Tài khoản thử nghiệm
+* **Ngô Tấn Thành** - MSSV: `524H0031`
+* **Nguyễn Quang Tựu** - MSSV: `524H0136`
 
-## 1. Yêu cầu môi trường
-* **Git**
-* **Node.js** (v18 trở lên) & **npm**
-* **Docker** (khuyên dùng để chạy nhanh Database MySQL) hoặc MySQL 8.0 cài trực tiếp trên máy
-* **Android Studio** (bản Iguana / Jellyfish / Koala trở lên, JDK 17 tích hợp sẵn)
-
----
-
-## 2. Clone dự án
-
-```bash
-git clone https://github.com/nguyenquangtuu/NoteFlow_APP.git
-cd NoteFlow_APP
-```
+| Tài khoản | Email | Mật khẩu | Mật khẩu ghi chú khóa |
+| :--- | :--- | :--- | :--- |
+| Chủ sở hữu | `thanh524h0031@student.tdtu.edu.vn` | `12345678` | `123456` |
+| Cộng tác viên | `tuu524h0136@student.tdtu.edu.vn` | `12345678` | |
 
 ---
 
-## 3. Khởi chạy Backend Server
+## 2. Quy trình 2 bước khởi chạy toàn bộ hệ thống
 
-### Cách 1: Dùng Docker cho Database + chạy Node.js máy host (Khuyên dùng)
+### Bước 1: Dựng Backend & Database bằng 1 lệnh Docker duy nhất
 
-1. Mở terminal tại thư mục gốc:
-   ```bash
-   # Khởi động container MySQL 8.0 (đã tích hợp sẵn tạo database và nạp schema.sql)
-   docker compose up -d mysql
-   ```
-
-2. Cài đặt thư viện và khởi động server Backend:
-   ```bash
-   cd BackEnd
-   npm install
-
-   # Tạo file .env nếu chưa có
-   cp .env.example .env
-
-   # Chạy server ở chế độ dev
-   npm run dev
-   ```
-   Server sẽ lắng nghe tại: `http://localhost:4000`
-
-### Cách 2: Chạy toàn bộ Backend & DB bằng Docker
+Mở Terminal tại thư mục gốc dự án:
 
 ```bash
 docker compose up --build -d
 ```
-* Xem log: `docker compose logs -f`
-* Dừng: `docker compose down`
 
-### Cách 3: Chạy với MySQL cài trực tiếp trên máy (không dùng Docker)
-1. Tạo database tên `noteflow` trong MySQL.
-2. Import file schema: `BackEnd/sql/schema.sql`.
-3. Cập nhật thông tin `DB_USER` và `DB_PASSWORD` trong file `BackEnd/.env`.
-4. Chạy:
-   ```bash
-   cd BackEnd
-   npm install
-   npm run dev
-   ```
+> **Cơ chế tự động:** Lệnh này tự động build server Node.js, khởi chạy MySQL 8.0, nạp toàn bộ cấu trúc bảng (`schema.sql`) và dữ liệu mẫu (`seed.sql`) chứa sẵn 2 tài khoản trên cùng 4 ghi chú thực nghiệm. Server lắng nghe tại `http://localhost:4000`.
+
+* Kiểm tra Backend: truy cập `http://localhost:4000/api/notes`
+* Dừng hệ thống khi chấm xong: `docker compose down`
 
 ---
 
-## 4. Chạy ứng dụng Android
+### Bước 2: Chạy ứng dụng Android
 
-### Cách 1: Chạy trực tiếp qua dòng lệnh (Không cần mở Android Studio)
-
-Nếu máy đã có Android SDK và máy ảo/thiết bị thật đang kết nối:
+#### Lựa chọn A: Chạy bằng dòng lệnh Terminal (Không cần mở Android Studio)
+*Yêu cầu: Máy tính đã mở sẵn máy ảo Android hoặc cắm cáp điện thoại Android.*
 
 ```bash
 cd Android
 
-# Build file APK
-./gradlew assembleDebug       # Trên Linux/macOS
-.\gradlew.bat assembleDebug   # Trên Windows
-
-# Cài đặt và chạy thẳng lên máy ảo/điện thoại (chạy adb):
-.\gradlew.bat installDebug
+# Cài đặt và mở app lên thiết bị
+.\gradlew.bat installDebug       # Windows (hoặc ./gradlew installDebug trên macOS/Linux)
 adb shell am start -n com.noteflow.app/.ui.main.MainActivity
 ```
 
-### Cách 2: Mở bằng Android Studio
+#### Lựa chọn B: Mở qua Android Studio
+1. Mở Android Studio, chọn **Open** và duyệt đến thư mục `Android` (`NoteFlow_APP/Android`).
+2. Nhấn nút **Run 'app'** (`Shift + F10`) để khởi chạy.
 
-1. Mở **Android Studio**.
-2. Chọn **Open** và trỏ đến thư mục `Android` trong repository (`NoteFlow_APP/Android`).
-3. Chờ Android Studio đồng bộ Gradle (Gradle Sync).
-4. Kiểm tra cấu hình địa chỉ máy chủ trong file:
-   `app/src/main/java/com/noteflow/app/utils/Constants.java`
-   * **Nếu chạy trên Android Emulator (máy ảo):** Mặc định đã là `http://10.0.2.2:4000` (giữ nguyên).
-   * **Nếu chạy trên điện thoại thật:** Đổi thành địa chỉ IPv4 máy tính của bạn (ví dụ `http://192.168.1.x:4000`, điện thoại và máy tính kết nối chung WiFi).
-5. Chọn thiết bị chạy (máy ảo Pixel/Nexus hoặc máy thật) rồi nhấn **Run 'app'** (`Shift + F10`).
+> **Cấu hình IP kết nối:**
+> * Trên máy ảo Android: Mặc định đã trỏ sẵn về `http://10.0.2.2:4000`, không cần sửa gì.
+> * Trên máy thật: Đổi `SERVER_HOST` trong `Android/app/src/main/java/com/noteflow/app/utils/Constants.java` thành địa chỉ IPv4 máy tính cùng mạng WiFi.
