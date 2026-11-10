@@ -67,6 +67,24 @@ docker compose up --build -d
 
 ## 4. Chạy ứng dụng Android
 
+### Cách 1: Chạy trực tiếp qua dòng lệnh (Không cần mở Android Studio)
+
+Nếu máy đã có Android SDK và máy ảo/thiết bị thật đang kết nối:
+
+```bash
+cd Android
+
+# Build file APK
+./gradlew assembleDebug       # Trên Linux/macOS
+.\gradlew.bat assembleDebug   # Trên Windows
+
+# Cài đặt và chạy thẳng lên máy ảo/điện thoại (chạy adb):
+.\gradlew.bat installDebug
+adb shell am start -n com.noteflow.app/.ui.main.MainActivity
+```
+
+### Cách 2: Mở bằng Android Studio
+
 1. Mở **Android Studio**.
 2. Chọn **Open** và trỏ đến thư mục `Android` trong repository (`NoteFlow_APP/Android`).
 3. Chờ Android Studio đồng bộ Gradle (Gradle Sync).
